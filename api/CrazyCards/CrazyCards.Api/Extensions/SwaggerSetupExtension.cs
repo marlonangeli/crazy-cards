@@ -5,7 +5,7 @@ using Microsoft.OpenApi.Models;
 
 namespace CrazyCards.Api.Extensions;
 
-public static class SwaggerSetup
+public static class SwaggerSetupExtension
 {
     public static void AddSwagger(this IServiceCollection services, IConfiguration configuration, bool useOidc = false)
     {

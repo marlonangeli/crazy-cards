@@ -7,5 +7,4 @@ namespace CrazyCards.Api.Controllers;
 [ApiController]
 public class ApiControllerBase : ControllerBase
 {
-    
 }
