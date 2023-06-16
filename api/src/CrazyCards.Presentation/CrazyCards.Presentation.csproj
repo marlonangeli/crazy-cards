@@ -23,4 +23,8 @@
       <ProjectReference Include="..\CrazyCards.Security\CrazyCards.Security.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Controllers\v1\" />
+    </ItemGroup>
+
 </Project>
