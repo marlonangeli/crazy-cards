@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace CrazyCards.Api.Extensions;
+namespace CrazyCards.Presentation.Extensions;
 
-public static class ApiVersioningExtension
+public static class ApiVersioningSetup
 {
     public static void AddVersioning(this IServiceCollection services)
     {
