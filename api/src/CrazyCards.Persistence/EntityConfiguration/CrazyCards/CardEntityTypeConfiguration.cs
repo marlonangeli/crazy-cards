@@ -17,6 +17,7 @@ public class CardEntityTypeConfiguration : IEntityTypeConfiguration<Card>
             .IsRequired()
             .HasMaxLength(100)
             .UseCollation(SqlCollation.PortugueseBrazilianCaseInsensitive);
+        
         builder.HasIndex(x => x.Name);
 
         builder.Property(x => x.Description)

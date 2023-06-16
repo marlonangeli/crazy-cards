@@ -4,6 +4,7 @@ using CrazyCards.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrazyCards.Persistence.Migrations
 {
     [DbContext(typeof(CrazyCardsDbContext))]
-    partial class CrazyCardsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230616175715_AddGameEntities")]
+    partial class AddGameEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,8 +114,6 @@ namespace CrazyCards.Persistence.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.HasIndex("Name");
-
                     b.HasIndex("SkinId");
 
                     b.ToTable("Class", (string)null);
@@ -184,8 +185,6 @@ namespace CrazyCards.Persistence.Migrations
                     b.HasIndex("ClassId");
 
                     b.HasIndex("ImageId");
-
-                    b.HasIndex("Name");
 
                     b.HasIndex("SkinId");
 
@@ -441,12 +440,6 @@ namespace CrazyCards.Persistence.Migrations
                         .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("Username")
-                        .IsUnique();
 
                     b.ToTable("Player", (string)null);
                 });

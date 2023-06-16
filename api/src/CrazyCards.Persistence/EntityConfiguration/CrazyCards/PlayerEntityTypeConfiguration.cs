@@ -16,9 +16,15 @@ public class PlayerEntityTypeConfiguration : IEntityTypeConfiguration<Player>
             .HasMaxLength(64)
             .IsRequired();
         
+        builder.HasIndex(x => x.Username)
+            .IsUnique();
+        
         builder.Property(x => x.Email)
             .HasMaxLength(256)
             .IsRequired();
+
+        builder.HasIndex(x => x.Email)
+            .IsUnique();
 
         builder.Property(x => x.IsActive)
             .IsRequired()

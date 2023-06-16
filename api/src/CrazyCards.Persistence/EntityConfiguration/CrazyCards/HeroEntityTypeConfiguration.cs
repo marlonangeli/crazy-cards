@@ -14,7 +14,9 @@ public class HeroEntityTypeConfiguration : IEntityTypeConfiguration<Hero>
         builder.Property(x => x.Name)
             .HasMaxLength(64)
             .IsRequired();
-        
+
+        builder.HasIndex(x => x.Name);
+
         builder.Property(x => x.Description)
             .HasMaxLength(512)
             .IsRequired();

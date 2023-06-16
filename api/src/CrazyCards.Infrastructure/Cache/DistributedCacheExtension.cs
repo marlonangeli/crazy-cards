@@ -1,7 +1,5 @@
 ﻿using System.Text.Json;
-using CrazyCards.Application.Interfaces.Services;
 using CrazyCards.Infrastructure.Settings;
-using CrazyCards.Infrastructure.Storage;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

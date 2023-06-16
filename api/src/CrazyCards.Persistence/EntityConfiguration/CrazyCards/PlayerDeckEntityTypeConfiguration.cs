@@ -1,4 +1,5 @@
 ﻿using CrazyCards.Domain.Entities.Deck;
+using CrazyCards.Domain.Entities.Player;
 using CrazyCards.Persistence.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -18,7 +19,7 @@ public class PlayerDeckEntityTypeConfiguration : IEntityTypeConfiguration<Player
 
         builder.HasOne(x => x.Player)
             .WithOne(player => player.PlayerDeck)
-            .HasForeignKey<PlayerDeck>(playerDeck => playerDeck.PlayerId)
+            .HasForeignKey<Player>(player => player.PlayerDeckId)
             .IsRequired();
     }
 }

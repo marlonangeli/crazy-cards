@@ -17,6 +17,8 @@ public class ClassEntityTypeConfiguration : IEntityTypeConfiguration<Class>
             .HasMaxLength(32)
             .UseCollation(SqlCollation.PortugueseBrazilianCaseInsensitive);
 
+        builder.HasIndex(x => x.Name);
+
         builder.Property(x => x.Description)
             .IsRequired()
             .HasMaxLength(256);
