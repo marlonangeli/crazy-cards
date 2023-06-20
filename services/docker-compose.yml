@@ -21,20 +21,18 @@ services:
     volumes:
       - ./data/rabbitmq:/var/lib/rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
-      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_DEFAULT_VHOST}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST}
 
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
     restart: always
     ports:
       - 1433:1433
-    volumes:
-      - ./data/sqlserver:/var/opt/mssql
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $SA_PASSWORD -Q 'SELECT 1' || exit 1"]
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P ${SQLSERVER_SA_PASSWORD} -Q 'SELECT 1' || exit 1"]
       interval: 10s
       retries: 10
       start_period: 10s
@@ -45,4 +43,67 @@ services:
       MSSQL_PID: Developer
       MSSQL_USER: ${SQLSERVER_USER}
       MSSQL_PASSWORD: ${SQLSERVER_PASSWORD}
-    
+      MSSQL_DATABASE: ${SQLSERVER_DATABASE}
+    volumes:
+      - sqlserver:/var/opt/mssql
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "keycloak", "-d", "${KEYCLOAK_DB_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    ports:
+      - 5432:5432
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1
+    container_name: keycloak
+    command: start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_URL_PORT: 5432
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      KC_DB_USERNAME: keycloak
+      KC_DB_SCHEMA: public
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_HEALTH_ENABLED: true
+    ports:
+      - 8080:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # keycloak-migration:
+  #   image: quay.io/keycloak/keycloak:21.1
+  #   command: "-Dkeycloak.migration.action=import -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/tmp/realm-export.json -Dkeycloak.migration.strategy=OVERWRITE_EXISTING -Dkeycloak.migration.usersExportStrategy=REALM_FILE -Dkeycloak.migration.realmName=master"
+  #   environment:
+  #     KC_DB: mssql
+  #     KC_DB_URL_HOST: sqlserver
+  #     KC_DB_URL_PORT: ${SQLSERVER_PORT}
+  #     KC_DB_URL_DATABASE: keycloak
+  #     KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+  #     KC_DB_USERNAME: keycloak
+  #     KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USER}
+  #     KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+  #     KC_HEALTH_ENABLED: "true"
+  #   volumes:
+  #     - ./data/keycloak/realm-export.json:/tmp/realm-export.json
+  #   depends_on:
+  #     sqlserver:
+  #       condition: service_healthy
+
+volumes:
+  sqlserver:
+  postgres:
