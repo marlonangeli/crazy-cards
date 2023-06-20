@@ -1,3 +1,4 @@
+using CrazyCards.Api.Extensions;
 using CrazyCards.Application;
 using CrazyCards.Infrastructure;
 using CrazyCards.Presentation;
@@ -16,6 +17,8 @@ builder.Services
 builder.Host.AddLogging();
 
 var app = builder.Build();
+
+app.EnsureDatabaseCreated();
 
 app.UsePresentation()
     .UseSecurity();

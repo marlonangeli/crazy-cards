@@ -25,7 +25,7 @@ public static class DistributedCacheExtension
         });
     }
     
-    private static async Task<T?> InsertAsync<T>(
+    public static async Task<T?> InsertAsync<T>(
         this IDistributedCache cache,
         string key,
         T value,
@@ -44,7 +44,7 @@ public static class DistributedCacheExtension
         return value;
     }
 
-    private static async Task<T?> GetAsync<T>(
+    public static async Task<T?> GetAsync<T>(
         this IDistributedCache cache,
         string key,
         CancellationToken cancellationToken = default)
@@ -117,14 +117,15 @@ public static class DistributedCacheExtension
     /// <param name="absoluteExpirationRelativeToNow">Expiration time</param>
     /// <param name="cancellationToken"></param>
     /// <typeparam name="T">Type of result</typeparam>
+    /// <typeparam name="TIn"></typeparam>
     /// <returns>
     /// Result from the cache or the function
     /// </returns>
-    public static async Task<T?> GetOrCallFunctionAsync<T>(
+    public static async Task<T?> GetOrCallFunctionAsync<TIn, T>(
         this IDistributedCache cache,
         string key,
-        Func<object[], Task<T>> function,
-        object[] args,
+        Func<TIn, Task<T>> function,
+        TIn args,
         TimeSpan? absoluteExpirationRelativeToNow = null,
         CancellationToken cancellationToken = default)
     {

@@ -1,4 +1,4 @@
-﻿namespace CrazyCards.Infrastructure.Options;
+﻿namespace CrazyCards.Infrastructure.Settings;
 
 public class RabbitMQOptions
 {

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CrazyCards.Application.Behaviors;
 
-public class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public sealed class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
     where TResponse : notnull
 {
