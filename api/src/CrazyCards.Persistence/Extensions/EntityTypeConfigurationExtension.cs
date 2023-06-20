@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CrazyCards.Persistence.Helpers;
+namespace CrazyCards.Persistence.Extensions;
 
-public static class EntityTypeConfigurationHelper
+public static class EntityTypeConfigurationExtension
 {
     public static void ConfigureBaseEntity<T> (this EntityTypeBuilder<T> builder) where T : Entity
     {

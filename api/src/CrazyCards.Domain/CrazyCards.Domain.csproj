@@ -7,8 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Interfaces\Repositories\" />
-      <Folder Include="Interfaces\Services\" />
+        <PackageReference Include="MediatR" Version="12.0.1" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Errors\" />
     </ItemGroup>
 
 </Project>

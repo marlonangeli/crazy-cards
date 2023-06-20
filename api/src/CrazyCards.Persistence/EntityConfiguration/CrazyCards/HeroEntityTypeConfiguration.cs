@@ -1,5 +1,5 @@
 ﻿using CrazyCards.Domain.Entities.Card;
-using CrazyCards.Persistence.Helpers;
+using CrazyCards.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

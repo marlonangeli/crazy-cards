@@ -1,3 +1,4 @@
+using CrazyCards.Application.Interfaces;
 using CrazyCards.Application.Interfaces.Services;
 using CrazyCards.Infrastructure.Cache;
 using CrazyCards.Infrastructure.Settings;
@@ -34,6 +35,8 @@ public static class DependencyInjection
             }
         });
 
+        services.AddScoped<IDbContext, CrazyCardsDbContext>();
+
         // var rabbitMqOptions = configuration.GetSection(RabbitMQSettings.SectionName).Get<RabbitMQSettings>()!;
         // var rabbitMqServiceOptions = new RabbitMqServiceOptions
         // {
@@ -43,6 +46,7 @@ public static class DependencyInjection
         //     Password = rabbitMqOptions.Password
         // };
         // services.AddRabbitMqProducer(rabbitMqServiceOptions);
+        
         services.AddSingleton<IBlobStorageService>(new BlobStorageService(configuration));
         services.AddRedisDistributedCache(configuration);
 

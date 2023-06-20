@@ -1,6 +1,6 @@
 ﻿using CrazyCards.Domain.Entities.Deck;
 using CrazyCards.Domain.Entities.Player;
-using CrazyCards.Persistence.Helpers;
+using CrazyCards.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

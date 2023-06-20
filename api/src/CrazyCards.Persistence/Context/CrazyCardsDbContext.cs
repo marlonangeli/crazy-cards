@@ -1,16 +1,18 @@
-﻿using CrazyCards.Domain.Entities.Card;
+﻿using System.Reflection;
+using CrazyCards.Application.Interfaces;
+using CrazyCards.Domain.Entities.Card;
 using CrazyCards.Domain.Entities.Card.Hability;
 using CrazyCards.Domain.Entities.Deck;
 using CrazyCards.Domain.Entities.Game;
 using CrazyCards.Domain.Entities.Player;
 using CrazyCards.Domain.Entities.Shared;
-using CrazyCards.Persistence.EntityConfiguration.CrazyCards;
-using CrazyCards.Persistence.EntityConfiguration.Game;
+using CrazyCards.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CrazyCards.Persistence.Context;
 
-public class CrazyCardsDbContext : DbContext
+public sealed class CrazyCardsDbContext : DbContext, IDbContext
 {
     public DbSet<Card> Cards { get; set; }
     public DbSet<Class> Classes { get; set; }
@@ -29,45 +31,61 @@ public class CrazyCardsDbContext : DbContext
     public CrazyCardsDbContext(DbContextOptions<CrazyCardsDbContext> options) : base(options)
     {
     }
+    
+    public new DbSet<TEntity> Set<TEntity>()
+        where TEntity : Entity =>
+        base.Set<TEntity>();
+    
+    /// <inheritdoc />
+    public async Task<TEntity?> GetBydIdAsync<TEntity>(Guid id, CancellationToken cancellationToken = default)
+        where TEntity : Entity
+    {
+        return await Set<TEntity>().FirstOrDefaultAsync(e => e.Id == id, cancellationToken: cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public void Insert<TEntity>(TEntity entity)
+        where TEntity : Entity =>
+        Set<TEntity>().Add(entity);
+
+    /// <inheritdoc />
+    public new void Remove<TEntity>(TEntity entity)
+        where TEntity : Entity =>
+        Set<TEntity>().Remove(entity);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new CardEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new ClassEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new ImageEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new HabilityEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new HeroEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new BattleDeckEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new PlayerDeckEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new PlayerEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new BattleEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new GameDeckEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new GameCardEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new RoundEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new MovementEntityTypeConfiguration());
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        
+        modelBuilder.ApplyUtcDateTimeConverter();
 
         modelBuilder.Ignore<Entity>();
 
         base.OnModelCreating(modelBuilder);
     }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        UpdatedAt();
+        UpdateAuditableEntities();
         
-        return base.SaveChangesAsync(cancellationToken);
+        return await base.SaveChangesAsync(cancellationToken);
     }
     
-    private void UpdatedAt()
+    private void UpdateAuditableEntities()
     {
-        var entities = ChangeTracker.Entries()
-            .Where(e => e.State == EntityState.Modified)
-            .Select(e => e.Entity as Entity)
-            .ToList();
-
-        foreach (var entity in entities)
+        var utcNow = DateTime.Now;
+        
+        foreach (EntityEntry<IEntity> entityEntry in ChangeTracker.Entries<IEntity>())
         {
-            entity?.SetUpdatedAt();
+            if (entityEntry.State == EntityState.Added)
+            {
+                entityEntry.Property(nameof(IEntity.CreatedAt)).CurrentValue = utcNow;
+            }
+
+            if (entityEntry.State == EntityState.Modified)
+            {
+                entityEntry.Property(nameof(IEntity.UpdatedAt)).CurrentValue = utcNow;
+            }
         }
     }
 }
