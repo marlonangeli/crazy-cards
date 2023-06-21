@@ -13,7 +13,7 @@ public static class DependencyInjection
         
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
         services.AddValidatorsFromAssembly(assembly, includeInternalTypes: true);
-        services.AddAutoMapper(assembly);
+        services.AddAutoMapper(config => config.AddMaps(assembly), assembly);
 
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));

@@ -1,6 +1,7 @@
 ﻿using CrazyCards.Domain.Entities.Card;
 using CrazyCards.Domain.Entities.Card.Hability;
 using CrazyCards.Domain.Entities.Shared;
+using CrazyCards.Domain.Enum;
 
 namespace CrazyCards.Application.Contracts.Cards;
 
@@ -13,7 +14,8 @@ public class CardResponse
     public Image Image { get; set; }
     public Domain.Entities.Card.Skin Skin { get; set; }
     public Class Class { get; set; }
-    public int Rarity { get; set; }
-    public int Type { get; set; }
+    public Rarity Rarity { get; set; }
+    public CardType Type { get; set; }
     public IEnumerable<Hability>? Habilities { get; set; }
+    public Dictionary<string, object>? AdditionalProperties { get; set; }
 }

@@ -19,21 +19,24 @@ internal sealed class GetCardsPaginatedHandler : IQueryHandler<GetCardsPaginated
         _mapper = mapper;
     }
 
-    public async Task<PagedList<CardResponse>> Handle(GetCardsPaginatedQuery request, CancellationToken cancellationToken)
+    public async Task<PagedList<CardResponse>> Handle(GetCardsPaginatedQuery request,
+        CancellationToken cancellationToken)
     {
-        var cards = _dbContext.Set<Card>()
+        var cards = await _dbContext.Set<Card>()
             .AsNoTracking()
+            .IgnoreAutoIncludes()
             .Include(i => i.Class)
             .Include(i => i.Habilities)
             .Include(i => i.Image)
             .Include(i => i.Skin)
             .OrderBy(x => x.Name)
             .Skip((request.Page - 1) * request.PageSize)
-            .Take(request.PageSize);
-        
+            .Take(request.PageSize)
+            .ToListAsync(cancellationToken);
+
         var count = await _dbContext.Set<Card>().CountAsync(cancellationToken);
 
-        var result = await _mapper.ProjectTo<CardResponse>(cards).ToListAsync(cancellationToken);
+        var result = cards.ConvertAll(c => _mapper.Map<CardResponse>(c));
         return new PagedList<CardResponse>(result, count, request.Page, request.PageSize);
     }
 }

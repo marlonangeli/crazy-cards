@@ -13,4 +13,5 @@ public record CreateCardCommand(
     Guid SkinId,
     Guid ClassId,
     Rarity? Rarity,
-    CardType? Type) : ICommand<Result<CardResponse>>;
+    CardType? Type,
+    Dictionary<string, object> AdditionalProperties) : ICommand<Result<CardResponse>>;

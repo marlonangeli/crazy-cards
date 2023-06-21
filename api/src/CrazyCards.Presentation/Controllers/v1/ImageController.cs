@@ -11,12 +11,24 @@ using Microsoft.Extensions.Logging;
 
 namespace CrazyCards.Presentation.Controllers.v1;
 
+/// <summary>
+/// Imagens
+/// </summary>
 public class ImageController : ApiControllerBase
 {
+    /// <summary>
+    /// Criar imagem a partir de base64
+    /// </summary>
+    /// <param name="request"/>
+    /// <param name="cancellationToken"></param>
+    /// <returns>
+    /// <see cref="ImageResponse"/>
+    /// </returns>
     [HttpPost]
     [Route("", Name = "CreateImageAsync")]
     [ProducesResponseType(typeof(ImageResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateImage(
         [FromBody] CreateImageRequest request,
         CancellationToken cancellationToken)
@@ -28,15 +40,22 @@ public class ImageController : ApiControllerBase
             .Bind(command => Sender.Send(command, cancellationToken));
 
         return imageResponse.IsSuccess
-            ? CreatedAtAction(nameof(GetImage), new {id = imageResponse.Value.Id}, imageResponse.Value)
+            ? CreatedAtAction(nameof(GetImageById), new {id = imageResponse.Value.Id}, imageResponse.Value)
             : HandleFailure(imageResponse);
     }
 
+    /// <summary>
+    /// Obter imagem por id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet]
-    [Route("{id:guid}", Name = "GetImageAsync")]
+    [Route("{id:guid}", Name = "GetImageByIdAsync")]
     [ProducesResponseType(typeof(Result<ImageResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetImage(
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetImageById(
         [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {

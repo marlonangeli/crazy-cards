@@ -18,6 +18,7 @@ public class ClassController : ApiControllerBase
     [Route("", Name = "CreateClassAsync")]
     [ProducesResponseType(typeof(ClassResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateClass(
         [FromBody] CreateClassRequest request,
         CancellationToken cancellationToken)
@@ -39,6 +40,7 @@ public class ClassController : ApiControllerBase
     [Route("{id:guid}", Name = "GetClassByIdAsync")]
     [ProducesResponseType(typeof(ClassResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetClassById(
         [FromRoute] Guid id,
         CancellationToken cancellationToken)

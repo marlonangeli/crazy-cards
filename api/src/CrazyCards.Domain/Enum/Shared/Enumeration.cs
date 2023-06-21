@@ -7,6 +7,8 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
 {
     private static readonly Dictionary<int, TEnum> Enumerations = CreateEnumerations();
 
+    protected Enumeration(int value) => FromValue(value);
+
     protected Enumeration(int value, string name)
     {
         Value = value;
@@ -15,6 +17,8 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
 
     public int Value { get; protected init; }
     public string Name { get; protected init; }
+    
+    public static explicit operator Enumeration<TEnum> (int value) => FromValue(value)!;
 
     public static TEnum? FromValue(int value) =>
         Enumerations.TryGetValue(value, out var enumeration) ? enumeration : null;

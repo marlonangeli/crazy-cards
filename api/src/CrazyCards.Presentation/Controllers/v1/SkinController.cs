@@ -14,10 +14,17 @@ namespace CrazyCards.Presentation.Controllers.v1;
 
 public class SkinController : ApiControllerBase
 {
+    /// <summary>
+    /// Cria uma skin a partir de base64
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPost]
     [Route("", Name = "CreateSkinAsync")]
     [ProducesResponseType(typeof(SkinResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateSkin(
         [FromBody] CreateSkinRequest request,
         CancellationToken cancellationToken)
@@ -35,10 +42,17 @@ public class SkinController : ApiControllerBase
             : HandleFailure(skinResponse);
     }
     
+    /// <summary>
+    /// Obter skin por id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("{id:guid}", Name = "GetSkinByIdAsync")]
     [ProducesResponseType(typeof(SkinResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetSkinById(
         [FromRoute] Guid id,
         CancellationToken cancellationToken)

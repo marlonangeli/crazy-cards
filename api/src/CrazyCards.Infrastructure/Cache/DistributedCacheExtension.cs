@@ -1,8 +1,9 @@
-﻿using System.Text.Json;
+﻿using CrazyCards.Domain.Extension;
 using CrazyCards.Infrastructure.Settings;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace CrazyCards.Infrastructure.Cache;
 
@@ -34,7 +35,11 @@ public static class DistributedCacheExtension
     {
         await cache.SetStringAsync(
             key,
-            JsonSerializer.Serialize(value),
+            JsonConvert.SerializeObject(value, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Converters = JsonConverterSetup.GetConverters()
+            }),
             new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = absoluteExpirationRelativeToNow
@@ -52,7 +57,11 @@ public static class DistributedCacheExtension
         var cachedValue = await cache.GetStringAsync(key, cancellationToken);
 
         return cachedValue is not null
-            ? JsonSerializer.Deserialize<T>(cachedValue)
+            ? JsonConvert.DeserializeObject<T>(cachedValue, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Converters = JsonConverterSetup.GetConverters()
+            })
             : default;
     }
     

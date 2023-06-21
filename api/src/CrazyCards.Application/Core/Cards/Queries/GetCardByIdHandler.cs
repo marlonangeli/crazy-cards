@@ -14,18 +14,25 @@ internal sealed class GetCardByIdHandler : IQueryHandler<GetCardByIdQuery, Resul
     private readonly IDbContext _dbContext;
     private readonly IMapper _mapper;
 
+    public GetCardByIdHandler(IDbContext dbContext, IMapper mapper)
+    {
+        _dbContext = dbContext;
+        _mapper = mapper;
+    }
+
     public async Task<Result<CardResponse>> Handle(GetCardByIdQuery request, CancellationToken cancellationToken)
     {
-        var cardQuery = _dbContext.Set<Card>()
+        var cardResponse = await _dbContext.Set<Card>()
             .AsNoTracking()
+            .IgnoreAutoIncludes()
             .Include(i => i.Class)
             .Include(i => i.Habilities)
             .Include(i => i.Image)
-            .Include(i => i.Skin);
+            .Include(i => i.Skin)
+            .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
 
-        return await _mapper.ProjectTo<CardResponse>(cardQuery)
-                   .FirstOrDefaultAsync(c => c.Id == request.Id,
-                       cancellationToken: cancellationToken) ??
-               (Result<CardResponse>)Result.Failure(new Error("Card.NotFound", "Carta não encontrada"));
+        return _mapper.Map<CardResponse>(cardResponse) ??
+               (Result<CardResponse>)Result.Failure(
+                   new Error("Card.NotFound", "Carta não encontrada"));
     }
 }

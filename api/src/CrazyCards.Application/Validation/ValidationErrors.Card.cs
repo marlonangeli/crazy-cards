@@ -45,5 +45,9 @@ internal static partial class ValidationErrors
         internal static Error TypeDoesNotExist => new(
             "Card.TypeDoesNotExist",
             "O tipo não existe.");
+        
+        internal static Error AdditionalPropertiesAreNullOrEmpty => new(
+            "Card.AdditionalPropertiesAreNullOrEmpty",
+            "As propriedades adicionais não podem ser nulas ou vazias.");
     }
 }

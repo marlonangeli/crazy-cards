@@ -8,6 +8,9 @@ using Microsoft.Extensions.Logging;
 
 namespace CrazyCards.Presentation.Controllers;
 
+/// <summary>
+/// ApiControllerBase
+/// </summary>
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
@@ -16,6 +19,7 @@ public abstract class ApiControllerBase : ControllerBase
     protected readonly ISender Sender;
     protected readonly ILogger<ApiControllerBase> Logger;
 
+    /// <inheritdoc />
     protected ApiControllerBase(ISender sender, ILogger<ApiControllerBase> logger)
     {
         Sender = sender;

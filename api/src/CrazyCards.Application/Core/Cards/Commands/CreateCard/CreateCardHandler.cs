@@ -20,11 +20,11 @@ internal sealed class CreateCardHandler : ICommandHandler<CreateCardCommand, Res
 
     public async Task<Result<CardResponse>> Handle(CreateCardCommand request, CancellationToken cancellationToken)
     {
-        var card = _mapper.Map<Card>(request);
-        
+        var card = CardFactory.CreateCardFromRequest(request);
+
         var entity = await _dbContext.Set<Card>().AddAsync(card, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return _mapper.Map<CardResponse>(entity.Entity);
+        
+        return Result.Success(_mapper.Map<CardResponse>(entity.Entity));
     }
 }

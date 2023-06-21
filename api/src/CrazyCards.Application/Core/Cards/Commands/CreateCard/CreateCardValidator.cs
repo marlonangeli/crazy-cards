@@ -52,5 +52,10 @@ public sealed class CreateCardValidator : AbstractValidator<CreateCardCommand>
         RuleFor(x => x.Type)
             .NotNull()
             .WithError(ValidationErrors.Card.TypeDoesNotExist);
+
+        RuleFor(x => x.AdditionalProperties)
+            .NotNull()
+            .NotEmpty()
+            .WithError(ValidationErrors.Card.AdditionalPropertiesAreNullOrEmpty);
     }
 }

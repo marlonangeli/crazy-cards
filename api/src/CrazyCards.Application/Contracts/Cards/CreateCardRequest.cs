@@ -10,4 +10,5 @@ public class CreateCardRequest
     public Guid ClassId { get; set; }
     public int Rarity { get; set; }
     public int Type { get; set; }
+    public Dictionary<string, object> AdditionalProperties { get; set; } = null!;
 }
