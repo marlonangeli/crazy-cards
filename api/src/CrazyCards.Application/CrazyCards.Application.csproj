@@ -19,12 +19,9 @@
       <Folder Include="Contracts\Deck\" />
       <Folder Include="Contracts\Game\" />
       <Folder Include="Contracts\Heroes\" />
-      <Folder Include="Contracts\Players\" />
-      <Folder Include="Core\Cards\Handlers\" />
       <Folder Include="Core\Deck\Commands\" />
       <Folder Include="Core\Deck\Handlers\" />
       <Folder Include="Core\Deck\Queries\" />
-      <Folder Include="Core\Classes\Handlers\" />
       <Folder Include="Core\Game\Commands\" />
       <Folder Include="Core\Game\Handlers\" />
       <Folder Include="Core\Game\Queries\" />
@@ -32,13 +29,12 @@
       <Folder Include="Core\Heroes\Handlers\" />
       <Folder Include="Core\Heroes\Queries\" />
       <Folder Include="Core\Images\Handlers\" />
-      <Folder Include="Core\Player\Commands\" />
       <Folder Include="Core\Player\Handlers\" />
-      <Folder Include="Core\Player\Queries\" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\CrazyCards.Domain\CrazyCards.Domain.csproj" />
+      <ProjectReference Include="..\CrazyCards.Security\CrazyCards.Security.csproj" />
     </ItemGroup>
 
 </Project>

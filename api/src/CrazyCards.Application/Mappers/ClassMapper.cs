@@ -5,7 +5,7 @@ using CrazyCards.Domain.Entities.Card;
 
 namespace CrazyCards.Application.Mappers;
 
-public class ClassMapper : Profile
+internal sealed class ClassMapper : Profile
 {
     public ClassMapper()
     {

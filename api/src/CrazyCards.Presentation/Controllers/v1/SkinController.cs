@@ -12,6 +12,9 @@ using Microsoft.Extensions.Logging;
 
 namespace CrazyCards.Presentation.Controllers.v1;
 
+/// <summary>
+/// Skins
+/// </summary>
 public class SkinController : ApiControllerBase
 {
     /// <summary>

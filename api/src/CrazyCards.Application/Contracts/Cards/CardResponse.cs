@@ -1,4 +1,7 @@
-﻿using CrazyCards.Domain.Entities.Card;
+﻿using CrazyCards.Application.Contracts.Classes;
+using CrazyCards.Application.Contracts.Images;
+using CrazyCards.Application.Contracts.Skin;
+using CrazyCards.Domain.Entities.Card;
 using CrazyCards.Domain.Entities.Card.Hability;
 using CrazyCards.Domain.Entities.Shared;
 using CrazyCards.Domain.Enum;
@@ -11,9 +14,9 @@ public class CardResponse
     public ushort ManaCost { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public Image Image { get; set; }
-    public Domain.Entities.Card.Skin Skin { get; set; }
-    public Class Class { get; set; }
+    public ImageResponse Image { get; set; }
+    public SkinResponse Skin { get; set; }
+    public ClassResponse Class { get; set; }
     public Rarity Rarity { get; set; }
     public CardType Type { get; set; }
     public IEnumerable<Hability>? Habilities { get; set; }

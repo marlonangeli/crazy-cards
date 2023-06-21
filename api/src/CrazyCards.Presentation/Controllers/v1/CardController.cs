@@ -13,6 +13,9 @@ using Microsoft.Extensions.Logging;
 
 namespace CrazyCards.Presentation.Controllers.v1;
 
+/// <summary>
+/// Cartas
+/// </summary>
 public class CardController : ApiControllerBase
 {
     /// <summary>

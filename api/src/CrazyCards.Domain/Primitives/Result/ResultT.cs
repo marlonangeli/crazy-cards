@@ -19,6 +19,13 @@ public class Result<TValue> : Result
         => _value = value;
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="Result{TValueType}"/> class with the specified parameters.
+    /// </summary>
+    /// <param name="value">The result value.</param>
+    protected internal Result(TValue value) : base(true, Error.None) 
+        => _value = value;
+    
+    /// <summary>
     /// Gets the result value if the result is successful, otherwise throws an exception.
     /// </summary>
     /// <returns>The result value if the result is successful.</returns>
