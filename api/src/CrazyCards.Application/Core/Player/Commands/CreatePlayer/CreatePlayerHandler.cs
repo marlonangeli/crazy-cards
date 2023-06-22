@@ -3,7 +3,6 @@ using CrazyCards.Application.Abstractions;
 using CrazyCards.Application.Contracts.Players;
 using CrazyCards.Application.Interfaces;
 using CrazyCards.Domain.Entities.Deck;
-using CrazyCards.Domain.Primitives;
 using CrazyCards.Domain.Primitives.Result;
 using CrazyCards.Security.Settings;
 using Keycloak.AuthServices.Sdk.Admin;

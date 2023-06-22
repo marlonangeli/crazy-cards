@@ -1,6 +1,4 @@
-﻿using CrazyCards.Domain.Entities.Deck;
-
-namespace CrazyCards.Application.Contracts.Players;
+﻿namespace CrazyCards.Application.Contracts.Players;
 
 public class PlayerResponse
 {

@@ -28,8 +28,6 @@
       <Folder Include="Core\Heroes\Commands\" />
       <Folder Include="Core\Heroes\Handlers\" />
       <Folder Include="Core\Heroes\Queries\" />
-      <Folder Include="Core\Images\Handlers\" />
-      <Folder Include="Core\Player\Handlers\" />
     </ItemGroup>
 
     <ItemGroup>

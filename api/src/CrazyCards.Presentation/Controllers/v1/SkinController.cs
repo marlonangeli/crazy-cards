@@ -71,6 +71,7 @@ public class SkinController : ApiControllerBase
         return cachedSkin!.IsSuccess ? Ok(cachedSkin.Value) : HandleFailure(cachedSkin);
     }
 
+    /// <inheritdoc />
     public SkinController(ISender sender, ILogger<SkinController> logger, IDistributedCache cache) : base(sender, logger)
     {
         _cache = cache;

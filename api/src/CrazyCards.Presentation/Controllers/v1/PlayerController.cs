@@ -1,4 +1,5 @@
-﻿using CrazyCards.Application.Contracts.Players;
+﻿using CrazyCards.Application.Contracts.Common;
+using CrazyCards.Application.Contracts.Players;
 using CrazyCards.Application.Core.Player.Commands.CreatePlayer;
 using CrazyCards.Application.Core.Player.Queries;
 using CrazyCards.Domain.Primitives.Result;
@@ -16,6 +17,12 @@ namespace CrazyCards.Presentation.Controllers.v1;
 /// </summary>
 public class PlayerController : ApiControllerBase
 {
+    /// <summary>
+    /// Criar um novo jogador
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPost]
     [Route("", Name = "CreatePlayerAsync")]
     [ProducesResponseType(typeof(PlayerResponse), StatusCodes.Status201Created)]
@@ -35,7 +42,49 @@ public class PlayerController : ApiControllerBase
             ? CreatedAtAction(nameof(GetPlayerById), new { id = playerResponse.Value.Id }, playerResponse.Value)
             : HandleFailure(playerResponse);
     }
-    
+
+    /// <summary>
+    /// Obter jogadores de forma paginada
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("", Name = "GetPlayersAsync")]
+    [ProducesResponseType(typeof(PagedList<PlayerResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetPlayersPaginated(
+        [FromQuery] GetPlayersPaginatedQuery request,
+        CancellationToken cancellationToken)
+    {
+        var cacheKey = $"players:{request.Page}:{request.PageSize}:{request.Username}:{request.Email}";
+
+        var cachedPlayers = await _cache.GetOrCallFunctionAsync(
+            cacheKey,
+            () => Sender.Send(new GetPlayersPaginatedQuery(
+                request.Page,
+                request.PageSize,
+                request.Username,
+                request.Email), cancellationToken),
+            TimeSpan.FromMinutes(1),
+            cancellationToken);
+
+        if (cachedPlayers is null)
+        {
+            return NoContent();
+        }
+
+        return Ok(cachedPlayers);
+    }
+
+    /// <summary>
+    /// Obter um jogador pelo seu identificador
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("{id:guid}", Name = "GetPlayerByIdAsync")]
     [ProducesResponseType(typeof(PlayerResponse), StatusCodes.Status200OK)]
@@ -57,6 +106,7 @@ public class PlayerController : ApiControllerBase
         return cachedPlayer!.IsSuccess ? Ok(cachedPlayer.Value) : HandleFailure(cachedPlayer);
     }
 
+    /// <inheritdoc />
     public PlayerController(ISender sender, ILogger<PlayerController> logger, IDistributedCache cache) : base(sender,
         logger)
     {

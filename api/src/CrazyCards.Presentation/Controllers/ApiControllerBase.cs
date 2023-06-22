@@ -26,6 +26,12 @@ public abstract class ApiControllerBase : ControllerBase
         Logger = logger;
     }
 
+    /// <summary>
+    /// HandleFailure
+    /// </summary>
+    /// <param name="result"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     protected IActionResult HandleFailure(Result result) =>
         result switch
         {

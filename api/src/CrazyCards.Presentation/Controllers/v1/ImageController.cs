@@ -60,16 +60,17 @@ public class ImageController : ApiControllerBase
         CancellationToken cancellationToken)
     {
         var cacheKey = $"image:{id}";
-        var cachedImage = await _cache.GetOrCallFunctionAsync(
+        var images = await _cache.GetOrCallFunctionAsync(
             cacheKey,
             () => Result.Success(new GetImageQuery(id))
                 .Bind(query => Sender.Send(query, cancellationToken)),
             TimeSpan.FromMinutes(1),
             cancellationToken);
 
-        return cachedImage!.IsSuccess ? Ok(cachedImage.Value) : HandleFailure(cachedImage);
+        return images!.IsSuccess ? Ok(images.Value) : HandleFailure(images);
     }
 
+    /// <inheritdoc />
     public ImageController(ISender sender, ILogger<ImageController> logger, IDistributedCache cache) : base(sender,
         logger)
     {

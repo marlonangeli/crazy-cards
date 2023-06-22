@@ -57,28 +57,30 @@ public class CardController : ApiControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
-    [Route("", Name = "GetCardsPaginatedAsync")]
+    [Route("", Name = "GetCardsAsync")]
     [ProducesResponseType(typeof(PagedList<CardResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GatCardsPaginated(
-        [FromQuery] GetCardsPaginatedRequest request,
+        [FromQuery] GetCardsRequest request,
         CancellationToken cancellationToken)
     {
         var cacheKey = $"cards:{request.Page}:{request.PageSize}";
 
-        var result = await _cache.GetOrCallFunctionAsync(
+        var cards = await _cache.GetOrCallFunctionAsync(
             cacheKey,
             () =>
-                Sender.Send(new GetCardsPaginatedQuery(request.Page, request.PageSize), cancellationToken),
+                Sender.Send(new GetCardsPaginatedQuery(
+                    (int)request.Page,
+                    (int)request.PageSize), cancellationToken),
             TimeSpan.FromMinutes(1), cancellationToken);
 
-        if (result is null)
+        if (cards is null)
         {
             return NoContent();
         }
 
-        return Ok(result);
+        return Ok(cards);
     }
 
     /// <summary>
@@ -98,21 +100,22 @@ public class CardController : ApiControllerBase
     {
         var cacheKey = $"card:{id}";
 
-        var result = await _cache.GetOrCallFunctionAsync(
+        var card = await _cache.GetOrCallFunctionAsync(
             cacheKey,
             () => Sender.Send(new GetCardByIdQuery(id), cancellationToken),
             TimeSpan.FromMinutes(1), cancellationToken: cancellationToken);
 
-        return result!.IsSuccess
-            ? Ok(result.Value)
-            : NotFound(result);
+        return card!.IsSuccess
+            ? Ok(card.Value)
+            : NotFound(card);
     }
-    
+
+    /// <inheritdoc />
     public CardController(ISender sender, ILogger<CardController> logger, IDistributedCache cache) : base(sender,
         logger)
     {
         _cache = cache;
     }
-    
+
     private readonly IDistributedCache _cache;
 }
