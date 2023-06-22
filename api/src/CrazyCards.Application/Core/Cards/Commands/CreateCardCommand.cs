@@ -3,7 +3,7 @@ using CrazyCards.Application.Contracts.Cards;
 using CrazyCards.Domain.Enum;
 using CrazyCards.Domain.Primitives.Result;
 
-namespace CrazyCards.Application.Core.Cards.Commands.CreateCard;
+namespace CrazyCards.Application.Core.Cards.Commands;
 
 public record CreateCardCommand(
     ushort ManaCost,

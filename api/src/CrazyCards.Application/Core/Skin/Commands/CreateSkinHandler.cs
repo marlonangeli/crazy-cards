@@ -1,67 +1,70 @@
 ﻿using CrazyCards.Application.Abstractions;
-using CrazyCards.Application.Contracts.Images;
+using CrazyCards.Application.Contracts.Skin;
+using CrazyCards.Application.Core.Skin.Commands;
 using CrazyCards.Application.Interfaces;
 using CrazyCards.Application.Interfaces.Services;
-using CrazyCards.Domain.Entities.Shared;
 using CrazyCards.Domain.Primitives.Result;
 
-namespace CrazyCards.Application.Core.Images.Commands.CreateImage;
+namespace CrazyCards.Application.Core.Skin.CreateSkin;
 
-internal sealed class CreateImageHandler : ICommandHandler<CreateImageCommand, Result<ImageResponse>>
+internal sealed class CreateSkinHandler : ICommandHandler<CreateSkinCommand, Result<SkinResponse>>
 {
     private readonly IDbContext _dbContext;
     private readonly IBlobStorageService _blobStorageService;
 
-    public CreateImageHandler(IDbContext dbContext, IBlobStorageService blobStorageService)
+    public CreateSkinHandler(IDbContext dbContext, IBlobStorageService blobStorageService)
     {
         _dbContext = dbContext;
         _blobStorageService = blobStorageService;
     }
 
-    public async Task<Result<ImageResponse>> Handle(CreateImageCommand request, CancellationToken cancellationToken)
+    public async Task<Result<SkinResponse>> Handle(CreateSkinCommand request, CancellationToken cancellationToken)
     {
         var id = Guid.NewGuid();
         var size = (int)request.Stream.Length;
         var mimeType = request.MimeType;
 
-        var saveImageToDatabaseResult = await SaveImageToDatabase(id, size, mimeType, cancellationToken);
-        if (saveImageToDatabaseResult.IsFailure)
+        var saveSkinToDatabaseResult = await SaveSkinToDatabase(id, size, mimeType, request.Name, cancellationToken);
+        if (saveSkinToDatabaseResult.IsFailure)
         {
-            return (Result<ImageResponse>)Result.Failure(saveImageToDatabaseResult.Error);
+            return (Result<SkinResponse>)Result.Failure(saveSkinToDatabaseResult.Error);
         }
 
-        var saveImageToBlobStorageResult =
+        var saveSkinToBlobStorageResult =
             await SaveImageToBlobStorage(id, request.Stream, request.MimeType, cancellationToken);
-        if (saveImageToBlobStorageResult.IsFailure)
+        if (saveSkinToBlobStorageResult.IsFailure)
         {
-            return (Result<ImageResponse>)Result.Failure(saveImageToBlobStorageResult.Error);
+            return (Result<SkinResponse>)Result.Failure(saveSkinToBlobStorageResult.Error);
         }
 
-        return Result.Success(new ImageResponse
+        return Result.Success(new SkinResponse()
         {
             Id = id,
             Size = size,
             MimeType = mimeType,
-            Url = saveImageToBlobStorageResult.Value
+            Url = saveSkinToBlobStorageResult.Value,
+            Name = request.Name
         });
     }
 
-    private async Task<Result> SaveImageToDatabase(Guid id, int size, string mimeType,
+    private async Task<Result> SaveSkinToDatabase(Guid id, int size, string mimeType, string name,
         CancellationToken cancellationToken)
     {
-        var image = new Image
+        var skin = new Domain.Entities.Card.Skin
         {
             Id = id,
             Size = size,
-            MimeType = mimeType
+            MimeType = mimeType,
+            Name = name
         };
 
-        _dbContext.Insert(image);
+        _dbContext.Insert(skin);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }
-
+    
+    // TODO - remver duplicidade
     private async Task<Result<string>> SaveImageToBlobStorage(Guid id, Stream content, string mimeType,
         CancellationToken cancellationToken)
     {

@@ -2,7 +2,7 @@
 using CrazyCards.Application.Contracts.Classes;
 using CrazyCards.Domain.Primitives.Result;
 
-namespace CrazyCards.Application.Core.Classes.Commands.CreateClass;
+namespace CrazyCards.Application.Core.Classes.Commands;
 
 public record CreateClassCommand(
     string Name,

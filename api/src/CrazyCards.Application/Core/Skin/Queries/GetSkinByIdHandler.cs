@@ -1,12 +1,13 @@
 ﻿using CrazyCards.Application.Abstractions;
 using CrazyCards.Application.Contracts.Skin;
+using CrazyCards.Application.Core.Skin.Commands.Queries;
 using CrazyCards.Application.Interfaces;
 using CrazyCards.Application.Interfaces.Services;
 using CrazyCards.Domain.Primitives;
 using CrazyCards.Domain.Primitives.Result;
 using Microsoft.EntityFrameworkCore;
 
-namespace CrazyCards.Application.Core.Skin.Commands.Queries;
+namespace CrazyCards.Application.Core.Skin.Queries;
 
 internal sealed class GetSkinByIdHandler : IQueryHandler<GetSkinByIdQuery, Result<SkinResponse>>
 {
