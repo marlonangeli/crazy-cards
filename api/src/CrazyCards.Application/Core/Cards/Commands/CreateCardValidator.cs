@@ -6,7 +6,7 @@ using CrazyCards.Domain.Entities.Shared;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-namespace CrazyCards.Application.Core.Cards.Commands.CreateCard;
+namespace CrazyCards.Application.Core.Cards.Commands;
 
 public sealed class CreateCardValidator : AbstractValidator<CreateCardCommand>
 {

@@ -35,9 +35,12 @@ internal sealed class GetPlayersPaginatedHandler : IQueryHandler<GetPlayersPagin
             .ToListAsync(cancellationToken);
 
         var count = await _dbContext.Set<Domain.Entities.Player.Player>().CountAsync(cancellationToken);
-
-        var result = players.ConvertAll(c => _mapper.Map<PlayerResponse>(c));
-        return new PagedList<PlayerResponse>(result, count, request.Page, request.PageSize);
+        
+        return new PagedList<PlayerResponse>(
+            _mapper.Map<List<PlayerResponse>>(players),
+            count,
+            request.Page,
+            request.PageSize);
     }
 
     private static IQueryable<Domain.Entities.Player.Player> UseFilters(

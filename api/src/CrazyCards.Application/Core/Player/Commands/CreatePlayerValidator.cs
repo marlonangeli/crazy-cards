@@ -7,7 +7,7 @@ using Keycloak.AuthServices.Sdk.Admin;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace CrazyCards.Application.Core.Player.Commands.CreatePlayer;
+namespace CrazyCards.Application.Core.Player.Commands;
 
 public sealed class CreatePlayerValidator : AbstractValidator<CreatePlayerCommand>
 {

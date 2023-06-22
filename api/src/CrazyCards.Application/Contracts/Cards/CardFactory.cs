@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 using CrazyCards.Application.Core.Cards.Commands;
-using CrazyCards.Application.Core.Cards.Commands.CreateCard;
 using CrazyCards.Domain.Entities.Card;
 
 namespace CrazyCards.Application.Contracts.Cards;
@@ -17,6 +16,8 @@ public static class CardFactory
         {
             { Value: 1 } => CreateMinionCard(request),
             { Value: 2 } => CreateSpellCard(request),
+            { Value: 3 } => CreateWeaponCard(request),
+            { Value: 4 } => CreateTotenCard(request),
             _ => throw new NotSupportedException("Tipo de carta não suportado")
         };
 
@@ -67,6 +68,42 @@ public static class CardFactory
         }
 
         return spellCard;
+    }
+
+    private static WeaponCard CreateWeaponCard(CreateCardCommand request)
+    {
+        var weaponCard = new WeaponCard();
+        
+        if (request.AdditionalProperties.TryGetValue(nameof(WeaponCard.Damage), out var damageProperty))
+        {
+            var damage = (JsonElement)damageProperty;
+            weaponCard.Damage = damage.GetUInt16();
+        }
+        if (request.AdditionalProperties.TryGetValue(nameof(WeaponCard.Durability), out var durabilityProperty))
+        {
+            var durability = (JsonElement)durabilityProperty;
+            weaponCard.Durability = durability.GetUInt16();
+        }
+        
+        return weaponCard;
+    }
+    
+    private static TotenCard CreateTotenCard(CreateCardCommand request)
+    {
+        var totenCard = new TotenCard();
+        
+        if (request.AdditionalProperties.TryGetValue(nameof(TotenCard.Heal), out var healPropery))
+        {
+            var heal = (JsonElement)healPropery;
+            totenCard.Heal = heal.GetUInt16();
+        }
+        if (request.AdditionalProperties.TryGetValue(nameof(WeaponCard.Shield), out var shieldProperty))
+        {
+            var shield = (JsonElement)shieldProperty;
+            totenCard.Shield = shield.GetUInt16();
+        }
+        
+        return totenCard;
     }
 
     private static void FillAdditionalProperties(Card card, IDictionary<string, object> additionalProperties)

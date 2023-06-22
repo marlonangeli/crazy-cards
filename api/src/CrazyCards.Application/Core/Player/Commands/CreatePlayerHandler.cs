@@ -9,7 +9,7 @@ using Keycloak.AuthServices.Sdk.Admin;
 using Keycloak.AuthServices.Sdk.Admin.Models;
 using Microsoft.Extensions.Configuration;
 
-namespace CrazyCards.Application.Core.Player.Commands.CreatePlayer;
+namespace CrazyCards.Application.Core.Player.Commands;
 
 internal sealed class CreatePlayerHandler : ICommandHandler<CreatePlayerCommand, Result<PlayerResponse>>
 {

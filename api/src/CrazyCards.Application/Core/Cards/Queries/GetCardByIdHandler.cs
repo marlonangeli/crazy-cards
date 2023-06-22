@@ -32,7 +32,7 @@ internal sealed class GetCardByIdHandler : IQueryHandler<GetCardByIdQuery, Resul
             .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
 
         return _mapper.Map<CardResponse>(cardResponse) ??
-               (Result<CardResponse>)Result.Failure(
+               Result.Failure<CardResponse>(
                    new Error("Card.NotFound", "Carta não encontrada"));
     }
 }

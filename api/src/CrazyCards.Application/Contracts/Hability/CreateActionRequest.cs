@@ -1,13 +1,10 @@
-﻿using CrazyCards.Domain.Enum;
+﻿namespace CrazyCards.Application.Contracts.Hability;
 
-namespace CrazyCards.Domain.Entities.Card.Hability;
-
-public class Action
+public class CreateActionRequest
 {
-    public string Description { get; set; }
+    public string Description { get; set; } = null!;
     public Guid? InvokeCardId { get; set; }
-    public Card? InvokeCard { get; set; }
-    public CardType? InvokeCardType { get; set; }
+    public int? InvokeCardType { get; set; }
     public ushort? Damage { get; set; }
     public ushort? Heal { get; set; }
     public ushort? Shield { get; set; }

@@ -1,6 +1,5 @@
 ﻿using CrazyCards.Application.Abstractions;
 using CrazyCards.Application.Contracts.Skin;
-using CrazyCards.Application.Core.Skin.Commands.Queries;
 using CrazyCards.Application.Interfaces;
 using CrazyCards.Application.Interfaces.Services;
 using CrazyCards.Domain.Primitives;

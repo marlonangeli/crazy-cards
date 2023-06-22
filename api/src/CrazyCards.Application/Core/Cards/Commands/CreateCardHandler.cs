@@ -5,7 +5,7 @@ using CrazyCards.Application.Interfaces;
 using CrazyCards.Domain.Entities.Card;
 using CrazyCards.Domain.Primitives.Result;
 
-namespace CrazyCards.Application.Core.Cards.Commands.CreateCard;
+namespace CrazyCards.Application.Core.Cards.Commands;
 
 internal sealed class CreateCardHandler : ICommandHandler<CreateCardCommand, Result<CardResponse>>
 {

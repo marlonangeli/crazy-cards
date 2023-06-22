@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CrazyCards.Application.Contracts.Cards;
 using CrazyCards.Application.Core.Cards.Commands;
-using CrazyCards.Application.Core.Cards.Commands.CreateCard;
 using CrazyCards.Domain.Entities.Card;
 
 namespace CrazyCards.Application.Mappers;
@@ -60,6 +59,22 @@ internal sealed class CardMapper : Profile
             {
                 { nameof(SpellCard.Damage), s.Damage },
                 { nameof(SpellCard.Heal), s.Heal }
+            }));
+        
+        CreateMap<WeaponCard, CardResponse>()
+            .IncludeBase<Card, CardResponse>()
+            .ForMember(d => d.AdditionalProperties, o => o.MapFrom(s => new Dictionary<string, object>
+            {
+                { nameof(WeaponCard.Damage), s.Damage },
+                { nameof(WeaponCard.Durability), s.Durability }
+            }));
+
+        CreateMap<TotenCard, CardResponse>()
+            .IncludeBase<Card, CardResponse>()
+            .ForMember(d => d.AdditionalProperties, o => o.MapFrom(s => new Dictionary<string, object>
+            {
+                { nameof(TotenCard.Heal), s.Heal },
+                { nameof(TotenCard.Shield), s.Shield }
             }));
     }
 }

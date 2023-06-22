@@ -1,9 +1,9 @@
 ﻿using CrazyCards.Application.Contracts.Cards;
 using CrazyCards.Application.Contracts.Common;
 using CrazyCards.Application.Core.Cards.Commands;
-using CrazyCards.Application.Core.Cards.Commands.CreateCard;
 using CrazyCards.Application.Core.Cards.Queries;
 using CrazyCards.Domain.Enum;
+using CrazyCards.Domain.Enum.Shared;
 using CrazyCards.Domain.Primitives.Result;
 using CrazyCards.Infrastructure.Cache;
 using MediatR;
@@ -110,6 +110,28 @@ public class CardController : ApiControllerBase
             ? Ok(card.Value)
             : NotFound(card);
     }
+    
+    /// <summary>
+    /// Obter os tipos de cartas
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("types", Name = "GetCardTypesAsync")]
+    [ProducesResponseType(typeof(IEnumerable<CardType>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult GetCardTypes()
+        => Ok(Enumeration<CardType>.All);
+
+    /// <summary>
+    /// Obter os tipos de raridade
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("rarities", Name = "GetRaritiesAsync")]
+    [ProducesResponseType(typeof(IEnumerable<Rarity>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult GetRarities() 
+        => Ok(Enumeration<Rarity>.All);
 
     /// <inheritdoc />
     public CardController(ISender sender, ILogger<CardController> logger, IDistributedCache cache) : base(sender,

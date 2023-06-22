@@ -1,11 +1,10 @@
 ﻿using CrazyCards.Application.Abstractions;
 using CrazyCards.Application.Contracts.Skin;
-using CrazyCards.Application.Core.Skin.Commands;
 using CrazyCards.Application.Interfaces;
 using CrazyCards.Application.Interfaces.Services;
 using CrazyCards.Domain.Primitives.Result;
 
-namespace CrazyCards.Application.Core.Skin.CreateSkin;
+namespace CrazyCards.Application.Core.Skin.Commands;
 
 internal sealed class CreateSkinHandler : ICommandHandler<CreateSkinCommand, Result<SkinResponse>>
 {

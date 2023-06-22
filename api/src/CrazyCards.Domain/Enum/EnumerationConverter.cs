@@ -8,6 +8,8 @@ public sealed class EnumerationConverter<T> : JsonConverter<T> where T : Enumera
     /// <inheritdoc />
     public override void WriteJson(JsonWriter writer, T? value, JsonSerializer serializer)
     {
+        if (value == null) return;
+        
         writer.WriteStartObject();
         writer.WritePropertyName(nameof(value.Value).ToLower());
         writer.WriteValue(value!.Value);
@@ -20,7 +22,11 @@ public sealed class EnumerationConverter<T> : JsonConverter<T> where T : Enumera
     public override T? ReadJson(JsonReader reader, Type objectType, T? existingValue, bool hasExistingValue,
         JsonSerializer serializer)
     {
-        while (reader.TokenType != JsonToken.Integer) reader.Read();
+        while (reader.TokenType != JsonToken.Integer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            reader.Read();
+        }
 
         int value = Convert.ToInt32(reader.Value);
 

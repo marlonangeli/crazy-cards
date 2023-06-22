@@ -1,4 +1,5 @@
 ﻿using CrazyCards.Application.Contracts.Classes;
+using CrazyCards.Application.Contracts.Hability;
 using CrazyCards.Application.Contracts.Images;
 using CrazyCards.Application.Contracts.Skin;
 using CrazyCards.Domain.Entities.Card.Hability;
@@ -17,6 +18,6 @@ public class CardResponse
     public ClassResponse Class { get; set; }
     public Rarity Rarity { get; set; }
     public CardType Type { get; set; }
-    public IEnumerable<Hability>? Habilities { get; set; }
+    public IEnumerable<HabilityResponse>? Habilities { get; set; }
     public Dictionary<string, object>? AdditionalProperties { get; set; }
 }

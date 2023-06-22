@@ -6,10 +6,6 @@ namespace CrazyCards.Domain.Entities.Card.Hability;
 
 public abstract class Hability : Entity
 {
-    [NotMapped]
-    protected abstract string Name { get; }
-    [NotMapped]
-    protected abstract string Description { get; }
     public Card Card { get; set; } = null!;
     public Guid CardId { get; set; }
     public Action? Action { get; set; }

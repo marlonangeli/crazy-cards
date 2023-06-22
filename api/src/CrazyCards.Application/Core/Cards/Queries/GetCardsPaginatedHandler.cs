@@ -36,7 +36,10 @@ internal sealed class GetCardsPaginatedHandler : IQueryHandler<GetCardsPaginated
 
         var count = await _dbContext.Set<Card>().CountAsync(cancellationToken);
 
-        var result = cards.ConvertAll(c => _mapper.Map<CardResponse>(c));
-        return new PagedList<CardResponse>(result, count, request.Page, request.PageSize);
+        return new PagedList<CardResponse>(
+            _mapper.Map<List<CardResponse>>(cards),
+            count,
+            request.Page,
+            request.PageSize);
     }
 }
