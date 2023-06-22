@@ -1,5 +1,6 @@
 ﻿using CrazyCards.Application.Contracts.Classes;
 using CrazyCards.Application.Contracts.Common;
+using CrazyCards.Application.Core.Classes.Commands;
 using CrazyCards.Application.Core.Classes.Commands.CreateClass;
 using CrazyCards.Application.Core.Classes.Queries;
 using CrazyCards.Domain.Primitives.Result;

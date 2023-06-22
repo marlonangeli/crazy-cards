@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.Json;
+using CrazyCards.Application.Core.Cards.Commands;
 using CrazyCards.Application.Core.Cards.Commands.CreateCard;
 using CrazyCards.Domain.Entities.Card;
 

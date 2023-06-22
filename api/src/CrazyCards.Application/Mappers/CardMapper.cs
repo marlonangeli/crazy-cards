@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CrazyCards.Application.Contracts.Cards;
+using CrazyCards.Application.Core.Cards.Commands;
 using CrazyCards.Application.Core.Cards.Commands.CreateCard;
 using CrazyCards.Domain.Entities.Card;
 

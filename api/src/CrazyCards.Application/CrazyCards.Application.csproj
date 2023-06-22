@@ -18,16 +18,12 @@
     <ItemGroup>
       <Folder Include="Contracts\Deck\" />
       <Folder Include="Contracts\Game\" />
-      <Folder Include="Contracts\Heroes\" />
+      <Folder Include="Contracts\Hability\" />
       <Folder Include="Core\Deck\Commands\" />
       <Folder Include="Core\Deck\Handlers\" />
       <Folder Include="Core\Deck\Queries\" />
       <Folder Include="Core\Game\Commands\" />
-      <Folder Include="Core\Game\Handlers\" />
       <Folder Include="Core\Game\Queries\" />
-      <Folder Include="Core\Heroes\Commands\" />
-      <Folder Include="Core\Heroes\Handlers\" />
-      <Folder Include="Core\Heroes\Queries\" />
     </ItemGroup>
 
     <ItemGroup>

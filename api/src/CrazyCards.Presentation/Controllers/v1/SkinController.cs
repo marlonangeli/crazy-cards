@@ -1,5 +1,5 @@
 ﻿using CrazyCards.Application.Contracts.Skin;
-using CrazyCards.Application.Core.Skin.Commands.CreateSkin;
+using CrazyCards.Application.Core.Skin.Commands;
 using CrazyCards.Application.Core.Skin.Commands.Queries;
 using CrazyCards.Domain.Primitives.Result;
 using CrazyCards.Infrastructure.Cache;
