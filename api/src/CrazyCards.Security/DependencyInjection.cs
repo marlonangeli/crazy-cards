@@ -21,15 +21,15 @@ public static class DependencyInjection
         services.AddKeycloakAdminHttpClient(new KeycloakAdminClientOptions
         {
             AuthServerUrl = keycloakSettings.AuthServerUrl,
-            Realm = keycloakSettings.Realm,
             Credentials = new KeycloakClientInstallationCredentials
             {
                 Secret = keycloakSettings.Credentials.Secret
             },
-            SslRequired = keycloakSettings.SslRequired,
+            Realm = keycloakSettings.Realm,
             Resource = keycloakSettings.Resource,
-            VerifyTokenAudience = keycloakSettings.VerifyTokenAudience,
-            RolesSource = RolesClaimTransformationSource.ResourceAccess
+            RolesSource = RolesClaimTransformationSource.ResourceAccess,
+            SslRequired = keycloakSettings.SslRequired,
+            VerifyTokenAudience = keycloakSettings.VerifyTokenAudience
         });
 
         services.AddKeycloakAuthentication(configuration);

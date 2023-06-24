@@ -16,10 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Contracts\Deck\" />
       <Folder Include="Contracts\Game\" />
-      <Folder Include="Core\Deck\Commands\" />
-      <Folder Include="Core\Deck\Queries\" />
       <Folder Include="Core\Game\Commands\" />
       <Folder Include="Core\Game\Queries\" />
     </ItemGroup>

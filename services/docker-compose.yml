@@ -1,5 +1,7 @@
 version: '3.9'
 
+# name: crazy-cards
+
 services:
   redis:
     image: redis:7.0.10-alpine

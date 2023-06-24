@@ -2,7 +2,6 @@
 using CrazyCards.Application.Contracts.Images;
 using CrazyCards.Application.Core.Images.Commands;
 using CrazyCards.Application.Core.Images.Queries;
-using CrazyCards.Application.Core.Skin.Queries;
 using CrazyCards.Domain.Primitives.Result;
 using CrazyCards.Infrastructure.Cache;
 using MediatR;

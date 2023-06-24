@@ -42,6 +42,31 @@ public class PlayerController : ApiControllerBase
             ? CreatedAtAction(nameof(GetPlayerById), new { id = playerResponse.Value.Id }, playerResponse.Value)
             : HandleFailure(playerResponse);
     }
+    
+    /// <summary>
+    /// Login
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [Route("login", Name = "LoginAsync")]
+    [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Login(
+        [FromBody] LoginRequest request,
+        CancellationToken cancellationToken)
+    {
+        var loginResponse = await Result.Success(new LoginCommand(
+                request.Username,
+                request.Password))
+            .Bind(command => Sender.Send(command, cancellationToken));
+
+        return loginResponse.IsSuccess
+            ? Ok(loginResponse.Value)
+            : HandleFailure(loginResponse);
+    }
 
     /// <summary>
     /// Obter jogadores de forma paginada

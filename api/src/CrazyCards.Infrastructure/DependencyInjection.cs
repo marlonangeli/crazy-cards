@@ -1,11 +1,9 @@
 using CrazyCards.Application.Interfaces;
 using CrazyCards.Application.Interfaces.Services;
-using CrazyCards.Infrastructure.Auth;
 using CrazyCards.Infrastructure.Cache;
 using CrazyCards.Infrastructure.Settings;
 using CrazyCards.Infrastructure.Storage;
 using CrazyCards.Persistence.Context;
-using CrazyCards.Security.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,10 +47,7 @@ public static class DependencyInjection
         //     Password = rabbitMqOptions.Password
         // };
         // services.AddRabbitMqProducer(rabbitMqServiceOptions);
-        
-        var keycloakSettings = configuration.GetSection(KeycloakSettings.SectionName).Get<KeycloakSettings>()!;
-        services.AddTransient<IKeycloakApiClient>(_ => new KeycloakApiClient(keycloakSettings));
-        
+
         services.AddSingleton<IBlobStorageService>(new BlobStorageService(configuration));
         services.AddRedisDistributedCache(configuration);
 
