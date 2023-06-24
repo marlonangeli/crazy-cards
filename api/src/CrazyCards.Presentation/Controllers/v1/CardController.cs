@@ -66,14 +66,17 @@ public class CardController : ApiControllerBase
         [FromQuery] GetCardsRequest request,
         CancellationToken cancellationToken)
     {
-        var cacheKey = $"cards:{request.Page}:{request.PageSize}";
+        var cacheKey = $"cards:{request.Page}:{request.PageSize}:{request.Name}:{request.Type}:{request.Rarity}";
 
         var cards = await _cache.GetOrCallFunctionAsync(
             cacheKey,
             () =>
                 Sender.Send(new GetCardsPaginatedQuery(
                     (int)request.Page,
-                    (int)request.PageSize), cancellationToken),
+                    (int)request.PageSize,
+                    request.Name,
+                    CardType.FromValue(request.Type ?? 0),
+                    Rarity.FromValue(request.Rarity ?? 0)), cancellationToken),
             TimeSpan.FromMinutes(1), cancellationToken);
 
         if (cards is null)

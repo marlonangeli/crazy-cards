@@ -56,7 +56,7 @@ public class PlayerController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetPlayersPaginated(
-        [FromQuery] GetPlayersPaginatedQuery request,
+        [FromQuery] GetPlayersRequest request,
         CancellationToken cancellationToken)
     {
         var cacheKey = $"players:{request.Page}:{request.PageSize}:{request.Username}:{request.Email}";
@@ -64,8 +64,8 @@ public class PlayerController : ApiControllerBase
         var cachedPlayers = await _cache.GetOrCallFunctionAsync(
             cacheKey,
             () => Sender.Send(new GetPlayersPaginatedQuery(
-                request.Page,
-                request.PageSize,
+                (int)request.Page,
+                (int)request.PageSize,
                 request.Username,
                 request.Email), cancellationToken),
             TimeSpan.FromMinutes(1),

@@ -28,9 +28,9 @@ internal sealed class GetImageHandler : IQueryHandler<GetImageQuery, Result<Imag
 
         if (image is null)
         {
-            return (Result<ImageResponse>)Result.Failure(new Error("ImageNotFound", "Imagem não encontrada"));
+            return Result.Failure<ImageResponse>(new Error("Image.NotFound", "Imagem não encontrada"));
         }
-
+        
         var url = await _blobStorageService.GetUrlAsync(image.Id, cancellationToken);
 
         return Result.Success(new ImageResponse

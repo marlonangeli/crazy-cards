@@ -76,7 +76,7 @@ public class HeroController : ApiControllerBase
             TimeSpan.FromMinutes(5),
             cancellationToken);
         
-        return heroes != null && heroes.Items.Any() 
+        return heroes is not null && heroes.Items.Any() 
             ? Ok(heroes) 
             : NoContent();
     }

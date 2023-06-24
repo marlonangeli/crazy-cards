@@ -1,6 +1,8 @@
-﻿using CrazyCards.Application.Contracts.Images;
+﻿using CrazyCards.Application.Contracts.Common;
+using CrazyCards.Application.Contracts.Images;
 using CrazyCards.Application.Core.Images.Commands;
 using CrazyCards.Application.Core.Images.Queries;
+using CrazyCards.Application.Core.Skin.Queries;
 using CrazyCards.Domain.Primitives.Result;
 using CrazyCards.Infrastructure.Cache;
 using MediatR;
@@ -42,6 +44,37 @@ public class ImageController : ApiControllerBase
         return imageResponse.IsSuccess
             ? CreatedAtAction(nameof(GetImageById), new {id = imageResponse.Value.Id}, imageResponse.Value)
             : HandleFailure(imageResponse);
+    }
+
+    /// <summary>
+    /// Obter imagens de forma paginada
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("", Name = "GetImagesAsync")]
+    [ProducesResponseType(typeof(PagedList<ImageResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetImages(
+        [FromQuery] GetPaginatedRequest request,
+        CancellationToken cancellationToken)
+    {
+        var cacheKey = $"images:{request.Page}:{request.PageSize}";
+        
+        var images = await _cache.GetOrCallFunctionAsync(
+            cacheKey,
+            () => Sender.Send(new GetImagesPaginatedQuery(
+                (int)request.Page,
+                (int)request.PageSize), cancellationToken),
+            TimeSpan.FromMinutes(1),
+            cancellationToken);
+
+        return images is not null && images.Items.Any()
+            ? Ok(images)
+            : NoContent();
     }
 
     /// <summary>

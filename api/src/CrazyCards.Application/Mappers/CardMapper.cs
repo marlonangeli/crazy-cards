@@ -31,6 +31,18 @@ internal sealed class CardMapper : Profile
             .ForMember(d => d.Damage, o => o.MapFrom(s => s.AdditionalProperties[nameof(SpellCard.Damage)]))
             .ForMember(d => d.Heal, o => o.MapFrom(s => s.AdditionalProperties[nameof(SpellCard.Heal)]))
             .ReverseMap();
+        
+        CreateMap<CreateCardCommand, WeaponCard>()
+            .IncludeBase<CreateCardCommand, Card>()
+            .ForMember(d => d.Damage, o => o.MapFrom(s => s.AdditionalProperties[nameof(WeaponCard.Damage)]))
+            .ForMember(d => d.Durability, o => o.MapFrom(s => s.AdditionalProperties[nameof(WeaponCard.Durability)]))
+            .ReverseMap();
+
+        CreateMap<CreateCardCommand, TotenCard>()
+            .IncludeBase<CreateCardCommand, Card>()
+            .ForMember(d => d.Heal, o => o.MapFrom(s => s.AdditionalProperties[nameof(TotenCard.Heal)]))
+            .ForMember(d => d.Shield, o => o.MapFrom(s => s.AdditionalProperties[nameof(TotenCard.Shield)]))
+            .ReverseMap();
 
         CreateMap<Card, CardResponse>()
             .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))

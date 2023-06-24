@@ -20,6 +20,12 @@ namespace CrazyCards.Presentation.Controllers.v1;
 /// </summary>
 public class HabilityController : ApiControllerBase
 {
+    /// <summary>
+    /// Criar uma habilidade 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPost]
     [Route("", Name = "CreateHabilityAsync")]
     [ProducesResponseType(typeof(HabilityResponse), StatusCodes.Status201Created)]
@@ -41,6 +47,12 @@ public class HabilityController : ApiControllerBase
             : HandleFailure(habilityResponse);
     }
 
+    /// <summary>
+    /// Obter habilidades de forma paginada
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("", Name = "GetHabilitiesAsync")]
     [ProducesResponseType(typeof(PagedList<HabilityResponse>), StatusCodes.Status200OK)]
@@ -67,6 +79,12 @@ public class HabilityController : ApiControllerBase
             : NoContent();
     }
 
+    /// <summary>
+    /// Obter habilidade por id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("{id:guid}", Name = "GetHabilityByIdAsync")]
     [ProducesResponseType(typeof(HabilityResponse), StatusCodes.Status200OK)]
@@ -90,6 +108,10 @@ public class HabilityController : ApiControllerBase
             : NotFound();
     }
 
+    /// <summary>
+    /// Obter tipos de habilidades
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     [Route("types", Name = "GetHabilityTypesAsync")]
     [ProducesResponseType(typeof(IEnumerator<HabilityType>), StatusCodes.Status200OK)]

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using CrazyCards.Domain.Entities.Shared;
+﻿using CrazyCards.Domain.Entities.Shared;
 using CrazyCards.Domain.Enum;
 
 namespace CrazyCards.Domain.Entities.Card.Hability;

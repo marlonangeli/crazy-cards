@@ -2,7 +2,6 @@
 using CrazyCards.Application.Contracts.Hability;
 using CrazyCards.Application.Contracts.Images;
 using CrazyCards.Application.Contracts.Skin;
-using CrazyCards.Domain.Entities.Card.Hability;
 using CrazyCards.Domain.Enum;
 
 namespace CrazyCards.Application.Contracts.Cards;

@@ -11,7 +11,7 @@ internal sealed class PlayerMapper : Profile
             .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
             .ForMember(d => d.Username, o => o.MapFrom(s => s.Username))
             .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))
-            .ForMember(d => d.PlayerDeckId, o => o.MapFrom(s => s.PlayerDeckId))
+            .ForMember(d => d.PlayerDeck, o => o.MapFrom(s => s.PlayerDeck))
             .ReverseMap();
     }
 }

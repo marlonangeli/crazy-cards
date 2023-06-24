@@ -40,13 +40,11 @@ public static class CardFactory
 
         if (request.AdditionalProperties.TryGetValue(nameof(MinionCard.Attack), out var attackProperty))
         {
-            var attack = (JsonElement)attackProperty;
-            minionCard.Attack = attack.GetUInt16();
+            minionCard.Attack = attackProperty.GetUInt16();
         }
         if (request.AdditionalProperties.TryGetValue(nameof(MinionCard.Health), out var healthProperty))
         {
-            var health = (JsonElement)healthProperty;
-            minionCard.Health = health.GetUInt16();
+            minionCard.Health = healthProperty.GetUInt16();
         }
 
         return minionCard;
@@ -58,13 +56,11 @@ public static class CardFactory
         
         if (request.AdditionalProperties.TryGetValue(nameof(SpellCard.Damage), out var damageProperty))
         {
-            var damage = (JsonElement)damageProperty;
-            spellCard.Damage = damage.GetUInt16();
+            spellCard.Damage = damageProperty.GetUInt16();
         }
         if (request.AdditionalProperties.TryGetValue(nameof(SpellCard.Heal), out var healProperty))
         {
-            var heal = (JsonElement)healProperty;
-            spellCard.Heal = heal.GetUInt16();
+            spellCard.Heal = healProperty.GetUInt16();
         }
 
         return spellCard;
@@ -76,13 +72,11 @@ public static class CardFactory
         
         if (request.AdditionalProperties.TryGetValue(nameof(WeaponCard.Damage), out var damageProperty))
         {
-            var damage = (JsonElement)damageProperty;
-            weaponCard.Damage = damage.GetUInt16();
+            weaponCard.Damage = damageProperty.GetUInt16();
         }
         if (request.AdditionalProperties.TryGetValue(nameof(WeaponCard.Durability), out var durabilityProperty))
         {
-            var durability = (JsonElement)durabilityProperty;
-            weaponCard.Durability = durability.GetUInt16();
+            weaponCard.Durability = durabilityProperty.GetUInt16();
         }
         
         return weaponCard;
@@ -94,13 +88,11 @@ public static class CardFactory
         
         if (request.AdditionalProperties.TryGetValue(nameof(TotenCard.Heal), out var healPropery))
         {
-            var heal = (JsonElement)healPropery;
-            totenCard.Heal = heal.GetUInt16();
+            totenCard.Heal = healPropery.GetUInt16();
         }
         if (request.AdditionalProperties.TryGetValue(nameof(WeaponCard.Shield), out var shieldProperty))
         {
-            var shield = (JsonElement)shieldProperty;
-            totenCard.Shield = shield.GetUInt16();
+            totenCard.Shield = shieldProperty.GetUInt16();
         }
         
         return totenCard;
@@ -118,5 +110,16 @@ public static class CardFactory
                 }
             }
         }
+    }
+    
+    private static ushort GetUInt16(this object element)
+    {
+        return element switch
+        {
+            JsonElement jsonElement => jsonElement.GetUInt16(),
+            ushort @ushort => @ushort,
+            long @long => (ushort)Math.Clamp(@long, 0, ushort.MaxValue),
+            _ => throw new NotSupportedException($"Não foi possível converter o valor {element} para UInt16")
+        };
     }
 }

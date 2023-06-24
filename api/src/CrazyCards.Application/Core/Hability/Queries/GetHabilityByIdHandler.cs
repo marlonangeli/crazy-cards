@@ -2,7 +2,6 @@
 using CrazyCards.Application.Abstractions;
 using CrazyCards.Application.Contracts.Hability;
 using CrazyCards.Application.Interfaces;
-using CrazyCards.Application.Validation;
 using CrazyCards.Domain.Primitives;
 using CrazyCards.Domain.Primitives.Result;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +33,7 @@ internal sealed class GetHabilityByIdHandler : IQueryHandler<GetHabilityByIdQuer
         {
             return Result.Failure<HabilityResponse>(new Error(
                 "Hability.NotFound",
-                "Hability not found"));
+                "Habilidade não encontrada"));
         }
 
         return Result.Success(_mapper.Map<HabilityResponse>(hability));

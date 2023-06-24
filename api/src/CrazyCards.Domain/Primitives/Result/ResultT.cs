@@ -1,4 +1,6 @@
-﻿namespace CrazyCards.Domain.Primitives.Result;
+﻿using Newtonsoft.Json;
+
+namespace CrazyCards.Domain.Primitives.Result;
 
 /// <summary>
 /// Represents the result of some operation, with status information and possibly a value and an error.
@@ -22,6 +24,7 @@ public class Result<TValue> : Result
     /// Initializes a new instance of the <see cref="Result{TValueType}"/> class with the specified parameters.
     /// </summary>
     /// <param name="value">The result value.</param>
+    [JsonConstructor]
     protected internal Result(TValue value) : base(true, Error.None) 
         => _value = value;
     

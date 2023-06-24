@@ -1,4 +1,5 @@
-﻿using CrazyCards.Application.Contracts.Skin;
+﻿using CrazyCards.Application.Contracts.Common;
+using CrazyCards.Application.Contracts.Skin;
 using CrazyCards.Application.Core.Skin.Commands;
 using CrazyCards.Application.Core.Skin.Queries;
 using CrazyCards.Domain.Primitives.Result;
@@ -43,6 +44,37 @@ public class SkinController : ApiControllerBase
         return skinResponse.IsSuccess
             ? CreatedAtAction(nameof(GetSkinById), new { id = skinResponse.Value.Id }, skinResponse.Value)
             : HandleFailure(skinResponse);
+    }
+    
+    /// <summary>
+    /// Obter skins de forma paginada
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("", Name = "GetSkinsAsync")]
+    [ProducesResponseType(typeof(PagedList<SkinResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetImages(
+        [FromQuery] GetPaginatedRequest request,
+        CancellationToken cancellationToken)
+    {
+        var cacheKey = $"skins:{request.Page}:{request.PageSize}";
+        
+        var skins = await _cache.GetOrCallFunctionAsync(
+            cacheKey,
+            () => Sender.Send(new GetSkinsPaginatedQuery(
+                (int)request.Page,
+                (int)request.PageSize), cancellationToken),
+            TimeSpan.FromMinutes(1),
+            cancellationToken);
+
+        return skins is not null && skins.Items.Any()
+            ? Ok(skins)
+            : NoContent();
     }
     
     /// <summary>

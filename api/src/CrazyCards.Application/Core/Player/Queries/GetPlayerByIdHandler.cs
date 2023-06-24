@@ -22,7 +22,11 @@ internal sealed class GetPlayerByIdHandler : IQueryHandler<GetPlayerByIdQuery, R
     {
         var player = await _dbContext.Set<Domain.Entities.Player.Player>()
             .AsNoTracking()
+            .IgnoreAutoIncludes()
+            .Include(i => i.PlayerDeck)
+            .ThenInclude(pd => pd.BattleDecks)
             .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
+        
         return Result.Success(_mapper.Map<PlayerResponse>(player));
     }
 }
