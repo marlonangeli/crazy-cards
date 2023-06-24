@@ -1,4 +1,6 @@
-﻿using CrazyCards.Domain.Enum.Shared;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using CrazyCards.Domain.Enum.Shared;
+using Newtonsoft.Json;
 
 namespace CrazyCards.Domain.Enum;
 
@@ -12,8 +14,8 @@ public abstract class Rarity : Enumeration<Rarity>
     protected Rarity(int value, string name) : base(value, name)
     {
     }
-
-    public abstract double Percentage { get; }
+    
+    protected abstract double Percentage { get; }
     
     private sealed class CommonRarity : Rarity
     {
@@ -21,7 +23,7 @@ public abstract class Rarity : Enumeration<Rarity>
         {
         }
 
-        public override double Percentage => 0.7;
+        protected override double Percentage => 0.7;
     }
     
     private sealed class RareRarity : Rarity
@@ -30,7 +32,7 @@ public abstract class Rarity : Enumeration<Rarity>
         {
         }
 
-        public override double Percentage => 0.2;
+        protected override double Percentage => 0.2;
     }
     
     private sealed class EpicRarity : Rarity
@@ -39,7 +41,7 @@ public abstract class Rarity : Enumeration<Rarity>
         {
         }
 
-        public override double Percentage => 0.1;
+        protected override double Percentage => 0.1;
     }
     
     private sealed class LegendaryRarity : Rarity
@@ -48,6 +50,6 @@ public abstract class Rarity : Enumeration<Rarity>
         {
         }
 
-        public override double Percentage => 0.01;
+        protected override double Percentage => 0.01;
     }
 }

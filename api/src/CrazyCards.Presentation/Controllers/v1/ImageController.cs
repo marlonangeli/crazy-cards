@@ -94,7 +94,7 @@ public class ImageController : ApiControllerBase
         var cacheKey = $"image:{id}";
         var images = await _cache.GetOrCallFunctionAsync(
             cacheKey,
-            () => Result.Success(new GetImageQuery(id))
+            () => Result.Success(new GetImageByIdQuery(id))
                 .Bind(query => Sender.Send(query, cancellationToken)),
             TimeSpan.FromMinutes(1),
             cancellationToken);

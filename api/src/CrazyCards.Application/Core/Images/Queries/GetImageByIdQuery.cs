@@ -4,4 +4,4 @@ using CrazyCards.Domain.Primitives.Result;
 
 namespace CrazyCards.Application.Core.Images.Queries;
 
-public record GetImageQuery(Guid Id) : IQuery<Result<ImageResponse>>;
+public record GetImageByIdQuery(Guid Id) : IQuery<Result<ImageResponse>>;

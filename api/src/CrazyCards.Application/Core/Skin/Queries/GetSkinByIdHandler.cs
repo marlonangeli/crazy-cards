@@ -1,5 +1,6 @@
 ﻿using CrazyCards.Application.Abstractions;
 using CrazyCards.Application.Contracts.Skin;
+using CrazyCards.Application.Core.Shared;
 using CrazyCards.Application.Interfaces;
 using CrazyCards.Application.Interfaces.Services;
 using CrazyCards.Domain.Primitives;
@@ -30,7 +31,8 @@ internal sealed class GetSkinByIdHandler : IQueryHandler<GetSkinByIdQuery, Resul
             return (Result<SkinResponse>)Result.Failure(new Error("SkinNotFound", "Skin não encontrada"));
         }
 
-        var url = await _blobStorageService.GetUrlAsync(skin.Id, cancellationToken);
+        var url =
+            $"{_blobStorageService.GetContainerUri()}/{skin.Id}{skin.MimeType.GetExtensionFile()}";
 
         return Result.Success(new SkinResponse
         {

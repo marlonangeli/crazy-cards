@@ -17,18 +17,23 @@ public class BlobStorageService : IBlobStorageService
         _containerClient = blobServiceClient.GetBlobContainerClient(azureSettings.ContainerName);
     }
 
-    public async Task<string> UploadAsync(Guid filename, string extension, Stream content, CancellationToken cancellationToken)
+    public async Task<string> UploadAsync(Guid fileName, string extension, Stream content, CancellationToken cancellationToken)
     {
-        var blobClient = _containerClient.GetBlobClient(filename + extension);
+        var blobClient = _containerClient.GetBlobClient(fileName + extension);
         await blobClient.UploadAsync(content, new BlobUploadOptions
         {
             Tags = new Dictionary<string, string>
             {
-                {"Id", filename.ToString()},
+                {"Id", fileName.ToString()},
                 {"UploadedAt", $"{DateTime.UtcNow}"}
             }
         }, cancellationToken);
         return blobClient.Uri.AbsoluteUri;
+    }
+
+    public string GetContainerUri()
+    {
+        return _containerClient.Uri.AbsoluteUri;
     }
     
     public async Task<string> GetUrlAsync(Guid fileName, CancellationToken cancellationToken)
