@@ -28,6 +28,7 @@ internal sealed class GetImagesPaginatedHandler : IQueryHandler<GetImagesPaginat
         var images = await _dbContext.Set<Image>()
             .AsNoTracking()
             .IgnoreAutoIncludes()
+            .OrderBy(x => x.Id)
             .Skip((request.Page - 1) * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);

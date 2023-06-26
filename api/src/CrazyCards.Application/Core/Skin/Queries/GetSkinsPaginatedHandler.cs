@@ -27,6 +27,7 @@ internal sealed class GetSkinsPaginatedHandler : IQueryHandler<GetSkinsPaginated
         var skins = await _dbContext.Set<Domain.Entities.Card.Skin>()
             .AsNoTracking()
             .IgnoreAutoIncludes()
+            .OrderBy(x => x.Id)
             .Skip((request.Page - 1) * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);
