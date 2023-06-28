@@ -16,12 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Contracts\Game\" />
-      <Folder Include="Core\Game\Commands\" />
-      <Folder Include="Core\Game\Queries\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\CrazyCards.Domain\CrazyCards.Domain.csproj" />
       <ProjectReference Include="..\CrazyCards.Security\CrazyCards.Security.csproj" />
     </ItemGroup>

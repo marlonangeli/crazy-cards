@@ -27,14 +27,6 @@ public static class DependencyInjection
                 options.EnableSensitiveDataLogging();
             }
         });
-        services.AddDbContext<GameDbContext>(options =>
-        {
-            options.UseSqlServer(gameDbConnectionString);
-            if (environment.IsDevelopment())
-            {
-                options.EnableSensitiveDataLogging();
-            }
-        });
 
         services.AddScoped<IDbContext, CrazyCardsDbContext>();
 

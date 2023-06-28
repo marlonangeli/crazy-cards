@@ -4,6 +4,7 @@ using CrazyCards.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrazyCards.Persistence.Migrations
 {
     [DbContext(typeof(CrazyCardsDbContext))]
-    partial class CrazyCardsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230628135247_AddWaitingRoomEntity")]
+    partial class AddWaitingRoomEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -418,9 +421,6 @@ namespace CrazyCards.Persistence.Migrations
                     b.Property<Guid>("BattleDeckId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BattleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -436,8 +436,6 @@ namespace CrazyCards.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BattleDeckId");
-
-                    b.HasIndex("BattleId");
 
                     b.HasIndex("PlayerId");
 
@@ -1030,18 +1028,11 @@ namespace CrazyCards.Persistence.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("CrazyCards.Domain.Entities.Game.Battle", "Battle")
-                        .WithMany()
-                        .HasForeignKey("BattleId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("CrazyCards.Domain.Entities.Player.Player", "Player")
                         .WithMany()
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("Battle");
 
                     b.Navigation("BattleDeck");
 

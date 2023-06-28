@@ -27,6 +27,7 @@ public sealed class CrazyCardsDbContext : DbContext, IDbContext
     public DbSet<GameCard> GameCards { get; set; }
     public DbSet<Round> Rounds { get; set; }
     public DbSet<Movement> Movements { get; set; }
+    public DbSet<WaitingRoom> WaitingRooms { get; set; }
 
     public CrazyCardsDbContext(DbContextOptions<CrazyCardsDbContext> options) : base(options)
     {
