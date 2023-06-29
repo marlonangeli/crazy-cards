@@ -45,4 +45,10 @@ public interface IDbContext
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The number of entities that have been saved.</returns>
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+    
+    Task BulkInsertEntitiesAsync<TEntity>(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        where TEntity : Entity;
+
+    Task BulkSaveAsync(CancellationToken cancellationToken);
 }

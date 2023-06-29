@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Newtonsoft.Json;
 
 namespace CrazyCards.Domain.Enum.Shared;
 
@@ -6,6 +7,10 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
     where TEnum : Enumeration<TEnum>
 {
     private static readonly Dictionary<int, TEnum> Enumerations = CreateEnumerations();
+    public static readonly IEnumerable<TEnum> All = Enumerations.Values;
+
+    [JsonConstructor]
+    protected Enumeration(int value) => FromValue(value);
 
     protected Enumeration(int value, string name)
     {
@@ -15,6 +20,8 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
 
     public int Value { get; protected init; }
     public string Name { get; protected init; }
+    
+    public static explicit operator Enumeration<TEnum> (int value) => FromValue(value)!;
 
     public static TEnum? FromValue(int value) =>
         Enumerations.TryGetValue(value, out var enumeration) ? enumeration : null;

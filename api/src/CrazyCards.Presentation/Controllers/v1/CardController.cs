@@ -1,8 +1,9 @@
 ﻿using CrazyCards.Application.Contracts.Cards;
 using CrazyCards.Application.Contracts.Common;
-using CrazyCards.Application.Core.Cards.Commands.CreateCard;
+using CrazyCards.Application.Core.Cards.Commands;
 using CrazyCards.Application.Core.Cards.Queries;
 using CrazyCards.Domain.Enum;
+using CrazyCards.Domain.Enum.Shared;
 using CrazyCards.Domain.Primitives.Result;
 using CrazyCards.Infrastructure.Cache;
 using MediatR;
@@ -13,12 +14,22 @@ using Microsoft.Extensions.Logging;
 
 namespace CrazyCards.Presentation.Controllers.v1;
 
+/// <summary>
+/// Cartas
+/// </summary>
 public class CardController : ApiControllerBase
 {
+    /// <summary>
+    /// Criar uma nova carta
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPost]
-    [Route("")]
+    [Route("", Name = "CreateCardAsync")]
     [ProducesResponseType(typeof(CardResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateCard(
         [FromBody] CreateCardRequest request,
         CancellationToken cancellationToken)
@@ -31,7 +42,8 @@ public class CardController : ApiControllerBase
                 request.SkinId,
                 request.ClassId,
                 Rarity.FromValue(request.Rarity),
-                CardType.FromValue(request.Type)))
+                CardType.FromValue(request.Type),
+                request.AdditionalProperties))
             .Bind(command => Sender.Send(command, cancellationToken));
 
         return cardResponse.IsSuccess
@@ -39,55 +51,97 @@ public class CardController : ApiControllerBase
             : HandleFailure(cardResponse);
     }
 
+    /// <summary>
+    /// Obter cartas de forma paginada
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet]
-    [Route("")]
+    [Route("", Name = "GetCardsAsync")]
     [ProducesResponseType(typeof(PagedList<CardResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GatCardsPaginated(
-        [FromQuery] GetCardsPaginatedRequest request,
+        [FromQuery] GetCardsRequest request,
         CancellationToken cancellationToken)
     {
-        var cacheKey = $"cards:{request.Page}:{request.PageSize}";
+        var cacheKey = $"cards:{request.Page}:{request.PageSize}:{request.Name}:{request.Type}:{request.Rarity}";
 
-        var result = await _cache.GetOrCallFunctionAsync(
+        var cards = await _cache.GetOrCallFunctionAsync(
             cacheKey,
             () =>
-                Sender.Send(new GetCardsPaginatedQuery(request.Page, request.PageSize), cancellationToken),
-            TimeSpan.FromMinutes(1));
+                Sender.Send(new GetCardsPaginatedQuery(
+                    (int)request.Page,
+                    (int)request.PageSize,
+                    request.Name,
+                    CardType.FromValue(request.Type ?? 0),
+                    Rarity.FromValue(request.Rarity ?? 0)), cancellationToken),
+            TimeSpan.FromMinutes(1), cancellationToken);
 
-        if (result is null)
+        if (cards is null)
         {
             return NoContent();
         }
 
-        return Ok(result);
+        return Ok(cards);
     }
 
+    /// <summary>
+    /// Obter uma carta por id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("{id:guid}", Name = "GetCardByIdAsync")]
     [ProducesResponseType(typeof(CardResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetCardById(
         [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
         var cacheKey = $"card:{id}";
 
-        var result = await _cache.GetOrCallFunctionAsync(
+        var card = await _cache.GetOrCallFunctionAsync(
             cacheKey,
             () => Sender.Send(new GetCardByIdQuery(id), cancellationToken),
             TimeSpan.FromMinutes(1), cancellationToken: cancellationToken);
 
-        return result!.IsSuccess
-            ? Ok(result.Value)
-            : NotFound(result);
+        return card!.IsSuccess
+            ? Ok(card.Value)
+            : NotFound(card);
     }
     
+    /// <summary>
+    /// Obter os tipos de cartas
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("types", Name = "GetCardTypesAsync")]
+    [ProducesResponseType(typeof(IEnumerable<CardType>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult GetCardTypes()
+        => Ok(Enumeration<CardType>.All);
+
+    /// <summary>
+    /// Obter os tipos de raridade
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [Route("rarities", Name = "GetRaritiesAsync")]
+    [ProducesResponseType(typeof(IEnumerable<Rarity>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult GetRarities() 
+        => Ok(Enumeration<Rarity>.All);
+
+    /// <inheritdoc />
     public CardController(ISender sender, ILogger<CardController> logger, IDistributedCache cache) : base(sender,
         logger)
     {
         _cache = cache;
     }
-    
+
     private readonly IDistributedCache _cache;
 }

@@ -410,6 +410,40 @@ namespace CrazyCards.Persistence.Migrations
                     b.ToTable("Round", (string)null);
                 });
 
+            modelBuilder.Entity("CrazyCards.Domain.Entities.Game.WaitingRoom", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BattleDeckId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BattleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsWaiting")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BattleDeckId");
+
+                    b.HasIndex("BattleId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("WaitingRoom", (string)null);
+                });
+
             modelBuilder.Entity("CrazyCards.Domain.Entities.Player.Player", b =>
                 {
                     b.Property<Guid>("Id")
@@ -986,6 +1020,32 @@ namespace CrazyCards.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Battle");
+                });
+
+            modelBuilder.Entity("CrazyCards.Domain.Entities.Game.WaitingRoom", b =>
+                {
+                    b.HasOne("CrazyCards.Domain.Entities.Deck.BattleDeck", "BattleDeck")
+                        .WithMany()
+                        .HasForeignKey("BattleDeckId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("CrazyCards.Domain.Entities.Game.Battle", "Battle")
+                        .WithMany()
+                        .HasForeignKey("BattleId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("CrazyCards.Domain.Entities.Player.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Battle");
+
+                    b.Navigation("BattleDeck");
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("CrazyCards.Domain.Entities.Card.Card", b =>

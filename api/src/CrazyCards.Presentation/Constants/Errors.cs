@@ -6,7 +6,9 @@ internal static class Errors
 {
     internal static Error UnProcessableRequest => new(
         "API.UnProcessableRequest",
-        "The server could not process the request.");
+        "Oops! Parece que o nosso servidor ficou um pouco confuso com a sua requisição.");
 
-    internal static Error ServerError => new("API.ServerError", "The server encountered an unrecoverable error.");
+    internal static Error ServerError => new(
+        "API.ServerError",
+        "Eita! Aconteceu um erro desconhecido no nosso servidor.");
 }

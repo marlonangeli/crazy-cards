@@ -13,22 +13,15 @@ namespace CrazyCards.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration,
+        IHostEnvironment environment)
     {
         var crazyCardsDbConnectionString = configuration.GetConnectionString(SqlServerSettings.CrazyCardsDb);
-        var gameDbConnectionString = configuration.GetConnectionString(SqlServerSettings.GameDb);
 
         services.AddDbContext<CrazyCardsDbContext>(options =>
         {
-            options.UseSqlServer(crazyCardsDbConnectionString);
-            if (environment.IsDevelopment())
-            {
-                options.EnableSensitiveDataLogging();
-            }
-        });
-        services.AddDbContext<GameDbContext>(options =>
-        {
-            options.UseSqlServer(gameDbConnectionString);
+            options.UseSqlServer(crazyCardsDbConnectionString,
+                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             if (environment.IsDevelopment())
             {
                 options.EnableSensitiveDataLogging();
@@ -46,7 +39,7 @@ public static class DependencyInjection
         //     Password = rabbitMqOptions.Password
         // };
         // services.AddRabbitMqProducer(rabbitMqServiceOptions);
-        
+
         services.AddSingleton<IBlobStorageService>(new BlobStorageService(configuration));
         services.AddRedisDistributedCache(configuration);
 

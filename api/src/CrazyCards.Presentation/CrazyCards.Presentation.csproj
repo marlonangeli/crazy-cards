@@ -23,5 +23,5 @@
       <ProjectReference Include="..\CrazyCards.Infrastructure\CrazyCards.Infrastructure.csproj" />
       <ProjectReference Include="..\CrazyCards.Security\CrazyCards.Security.csproj" />
     </ItemGroup>
-
+    
 </Project>

@@ -8,5 +8,5 @@ public class GameCardAttributeProperty
     public ushort Heal { get; set; }
     public ushort Shield { get; set; }
     public ushort Durability { get; set; }
-    public ushort SpellDamage { get; set; }
+    public ushort Damage { get; set; }
 }

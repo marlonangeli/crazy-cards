@@ -7,38 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="AutoMapper" Version="12.0.1" />
-      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-      <PackageReference Include="FluentValidation" Version="11.5.2" />
-      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2" />
-      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.16" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+        <PackageReference Include="AutoMapper" Version="12.0.1"/>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1"/>
+        <PackageReference Include="FluentValidation" Version="11.5.2"/>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2"/>
+        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.16"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Contracts\Deck\" />
-      <Folder Include="Contracts\Game\" />
-      <Folder Include="Contracts\Heroes\" />
-      <Folder Include="Contracts\Players\" />
-      <Folder Include="Core\Cards\Handlers\" />
-      <Folder Include="Core\Deck\Commands\" />
-      <Folder Include="Core\Deck\Handlers\" />
-      <Folder Include="Core\Deck\Queries\" />
-      <Folder Include="Core\Classes\Handlers\" />
-      <Folder Include="Core\Game\Commands\" />
-      <Folder Include="Core\Game\Handlers\" />
-      <Folder Include="Core\Game\Queries\" />
-      <Folder Include="Core\Heroes\Commands\" />
-      <Folder Include="Core\Heroes\Handlers\" />
-      <Folder Include="Core\Heroes\Queries\" />
-      <Folder Include="Core\Images\Handlers\" />
-      <Folder Include="Core\Player\Commands\" />
-      <Folder Include="Core\Player\Handlers\" />
-      <Folder Include="Core\Player\Queries\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\CrazyCards.Domain\CrazyCards.Domain.csproj" />
+        <ProjectReference Include="..\CrazyCards.Domain\CrazyCards.Domain.csproj"/>
+        <ProjectReference Include="..\CrazyCards.Security\CrazyCards.Security.csproj"/>
     </ItemGroup>
 
 </Project>
