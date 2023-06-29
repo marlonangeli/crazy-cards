@@ -4,4 +4,6 @@ using CrazyCards.Domain.Primitives.Result;
 
 namespace CrazyCards.Application.Core.Game.Commands;
 
-public record StartBattleCommand(Guid BattleId) : ICommand<Result<BattleResponse>>;
+public record WaitForBattleCommand(
+    Guid PlayerId,
+    Guid BattleDeckId) : ICommand<Result<WaitingRoomResponse>>;

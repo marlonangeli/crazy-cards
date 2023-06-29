@@ -17,11 +17,11 @@ public static class DependencyInjection
         IHostEnvironment environment)
     {
         var crazyCardsDbConnectionString = configuration.GetConnectionString(SqlServerSettings.CrazyCardsDb);
-        var gameDbConnectionString = configuration.GetConnectionString(SqlServerSettings.GameDb);
 
         services.AddDbContext<CrazyCardsDbContext>(options =>
         {
-            options.UseSqlServer(crazyCardsDbConnectionString);
+            options.UseSqlServer(crazyCardsDbConnectionString,
+                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             if (environment.IsDevelopment())
             {
                 options.EnableSensitiveDataLogging();

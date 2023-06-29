@@ -2,5 +2,5 @@
 
 public static class DeckRules
 {
-    public static int MaximumCardsInDeck = 20;
+    public const int MaximumCardsInDeck = 10;
 }

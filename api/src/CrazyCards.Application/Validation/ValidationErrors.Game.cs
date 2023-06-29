@@ -17,5 +17,9 @@ internal static partial class ValidationErrors
         internal static Error PlayesJustIsWaiting => new(
             "Game.PlayesJustIsWaiting",
             "O jogador já está em uma sala de espera");
+        
+        internal static Error BattleDoesNotExist => new(
+            "Game.BattleDoesNotExist",
+            "A batalha não existe");
     }
 }

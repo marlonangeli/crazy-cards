@@ -17,17 +17,23 @@ namespace CrazyCards.Presentation.Controllers.v1;
 /// </summary>
 public class BattleController : ApiControllerBase
 {
+    /// <summary>
+    /// Criar nova sala de espera
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPost]
-    [Route("", Name = "StartBattleAsync")]
+    [Route("wait", Name = "WaitForBattleAsync")]
     [ProducesResponseType(typeof(WaitingRoomResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> StartBattle(
-        [FromBody] StartBattleRequest request,
+    public async Task<IActionResult> WaitForBattle(
+        [FromBody] WaitForBattleRequest request,
         CancellationToken cancellationToken)
     {
         var response = await Result.Create(request, Errors.UnProcessableRequest)
-            .Map(_ => new StartBattleCommand(request.PlayerId, request.BattleDeckId))
+            .Map(_ => new WaitForBattleCommand(request.PlayerId, request.BattleDeckId))
             .Bind(command => Sender.Send(command, cancellationToken));
         
         return response.IsSuccess
@@ -35,6 +41,12 @@ public class BattleController : ApiControllerBase
             : HandleFailure(response);
     }
     
+    /// <summary>
+    /// Obter sala de espera
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("waitingroom/{id:guid}", Name = "GetWaitingRoomAsync")]
     [ProducesResponseType(typeof(WaitingRoomResponse), StatusCodes.Status200OK)]
@@ -56,7 +68,37 @@ public class BattleController : ApiControllerBase
             ? Ok(waitingRoom.Value)
             : HandleFailure(waitingRoom);
     }
+    
+    /// <summary>
+    /// Iniciar batalha
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [Route("battle", Name = "StartBattleAsync")]
+    [ProducesResponseType(typeof(BattleResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> StartBattle(
+        [FromBody] Guid id,
+        CancellationToken cancellationToken)
+    {
+        var response = await Result.Create(id, Errors.UnProcessableRequest)
+            .Map(_ => new StartBattleCommand(id))
+            .Bind(command => Sender.Send(command, cancellationToken));
+        
+        return response.IsSuccess
+            ? CreatedAtAction(nameof(GetBattle), new { id = response.Value.Id }, response.Value)
+            : HandleFailure(response);
+    }
 
+    /// <summary>
+    /// Obter batalha
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("{id:guid}", Name = "GetBattleAsync")]
     [ProducesResponseType(typeof(BattleResponse), StatusCodes.Status200OK)]

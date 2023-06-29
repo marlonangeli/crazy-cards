@@ -33,6 +33,17 @@ public sealed class CrazyCardsDbContext : DbContext, IDbContext
     {
     }
     
+    public async Task BulkInsertEntitiesAsync<TEntity>(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        where TEntity : Entity
+    {
+        await this.BulkInsertAsync(entities, cancellationToken);
+    }
+
+    public async Task BulkSaveAsync(CancellationToken cancellationToken)
+    {
+        await this.BulkSaveChangesAsync(cancellationToken);
+    }
+    
     public new DbSet<TEntity> Set<TEntity>()
         where TEntity : Entity =>
         base.Set<TEntity>();

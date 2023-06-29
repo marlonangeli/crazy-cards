@@ -24,6 +24,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Reference Include="CrazyCards.Application">
+        <HintPath>..\CrazyCards.Api\bin\Release\net6.0\CrazyCards.Application.dll</HintPath>
+      </Reference>
       <Reference Include="Microsoft.Extensions.Configuration.Abstractions" />
     </ItemGroup>
 

@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <UserSecretsId>a2c4df34-2f9e-4430-9dea-f342754ea7bc</UserSecretsId>
+        <UserSecretsId>CrazyCards</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
